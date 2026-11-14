@@ -238,9 +238,9 @@ const MIMOSA_WHATSAPP = '';
         ? new Date(f.fecha + 'T12:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })
         : 'por concretar';
       const msg = [
-        'Hola Mimosa, me gustaría encargar una tarta:',
-        `- Tarta: ${f.tarta}`,
-        `- Para: ${f.personas}`,
+        'Hola Mimosa, me gustaría hacer un encargo:',
+        `- Encargo: ${f.tarta}`,
+        `- Tamaño: ${f.tamano}`,
         `- Fecha: ${fecha}`,
         f.ocasion ? `- Ocasión: ${f.ocasion}` : '',
         f.notas ? `- Detalles: ${f.notas}` : '',
@@ -295,3 +295,195 @@ const MIMOSA_WHATSAPP = '';
     });
   }
 })();
+
+/* Portada: la taza cae en la esquina y el café escribe «mimosa» de un solo trazo */
+(function () {
+  const hero = document.querySelector('.portada-cafe');
+  if (!hero) return;
+  const taza = hero.querySelector('.cafe-taza');
+  const boca = hero.querySelector('.cafe-boca');
+  const logo = hero.querySelector('.vierte');
+  const svg = hero.querySelector('.cafe-rastro');
+  const NS = 'http://www.w3.org/2000/svg';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const VEL = 520; // px por segundo: misma velocidad en el hilo y en las letras
+  let dibujado = false;
+
+  function construir() {
+    const h = hero.getBoundingClientRect();
+    const b = boca.getBoundingClientRect();
+    const l = logo.getBoundingClientRect();
+    const m = { x: b.left + b.width / 2 - h.left, y: b.top + b.height / 2 - h.top };
+    const e = { x: l.left - h.left + l.width * 0.03, y: l.top - h.top + l.height * 0.62 };
+    svg.setAttribute('viewBox', `0 0 ${h.width} ${h.height}`);
+    svg.textContent = '';
+    const dx = e.x - m.x, dy = e.y - m.y;
+    const sw = Math.max(Math.abs(dx) * 0.5, h.width * 0.2);
+    const c1 = { x: m.x + Math.max(dx * 0.55, sw), y: m.y + dy * 0.22 };
+    const c2 = { x: e.x - Math.max(dx * 0.4, sw * 0.9), y: e.y + dy * 0.04 };
+    const bez = (t, k) => (1 - t) ** 3 * m[k] + 3 * (1 - t) ** 2 * t * c1[k] + 3 * (1 - t) * t * t * c2[k] + t ** 3 * e[k];
+    const der = (t, k) => 3 * (1 - t) ** 2 * (c1[k] - m[k]) + 6 * (1 - t) * t * (c2[k] - c1[k]) + 3 * t * t * (e[k] - c2[k]);
+    const centro = `M ${m.x} ${m.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${e.x} ${e.y}`;
+
+    // Grosor: ancho al salir de la taza, se estrecha hasta el trazo de la letra, con pequeñas ondas de líquido
+    const wIni = Math.max(10, l.height * 0.34), wFin = Math.max(4, l.height * 0.1);
+    const N = 90, izq = [], der2 = [];
+    for (let i = 0; i <= N; i++) {
+      const t = i / N;
+      const x = bez(t, 'x'), y = bez(t, 'y');
+      let tx = der(t, 'x'), ty = der(t, 'y');
+      const n = Math.hypot(tx, ty) || 1; tx /= n; ty /= n;
+      const base = wFin + (wIni - wFin) * Math.pow(1 - t, 2.2);
+      const onda = 1 + 0.13 * Math.sin(t * 23 + 1.3) * Math.sin(t * 7.1) * (1 - t * 0.6);
+      const w = base * onda / 2;
+      izq.push([x - ty * w, y + tx * w]);
+      der2.push([x + ty * w * (0.92 + 0.08 * Math.sin(t * 17)), y - tx * w * (0.92 + 0.08 * Math.sin(t * 17))]);
+    }
+    const pts = izq.concat(der2.reverse()).map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`);
+    const id = 'cafe-m' + Math.round(Math.random() * 1e6);
+    svg.innerHTML = `
+      <defs>
+        <mask id="${id}" maskUnits="userSpaceOnUse" x="0" y="0" width="${h.width}" height="${h.height}">
+          <path class="cafe-revela" d="${centro}" fill="none" stroke="#fff" stroke-width="${wIni * 2.2}" stroke-linecap="round"/>
+        </mask>
+      </defs>
+      <g mask="url(#${id})">
+        <g>
+          <polygon points="${pts.join(' ')}" fill="var(--bordeaux)"/>
+          <circle cx="${e.x}" cy="${e.y}" r="${wFin / 2}" fill="var(--bordeaux)"/>
+        </g>
+        <path d="${centro}" fill="none" stroke="#E9E2D4" stroke-opacity=".22" stroke-width="${Math.max(1.5, wFin * 0.28)}" stroke-linecap="round" transform="translate(${-wFin * 0.25} ${-wFin * 0.3})"/>
+      </g>`;
+    // Gotitas que salpican junto al chorro
+    const gotas = [];
+    [[.18, 1.6, .05], [.33, -1.9, .035], [.52, 1.7, .04], [.68, -1.5, .03], [.84, 1.8, .035]].forEach(([t, lado, r]) => {
+      let tx = der(t, 'x'), ty = der(t, 'y'); const n = Math.hypot(tx, ty) || 1; tx /= n; ty /= n;
+      const w = (wFin + (wIni - wFin) * Math.pow(1 - t, 2.2)) / 2;
+      const c = document.createElementNS(NS, 'circle');
+      c.setAttribute('cx', bez(t, 'x') - ty * w * lado);
+      c.setAttribute('cy', bez(t, 'y') + tx * w * lado);
+      c.setAttribute('r', Math.max(2, l.height * r));
+      c.setAttribute('fill', 'var(--bordeaux)');
+      c.dataset.t = t;
+      svg.appendChild(c);
+      gotas.push(c);
+    });
+    return { p: svg.querySelector('.cafe-revela'), gotas, ancho: l.width };
+  }
+
+  function finalEstatico() {
+    construir();
+    logo.classList.add('is-writing');
+    logo.getAnimations().forEach(a => a.finish());
+    dibujado = true;
+    hero.classList.add('is-escrito');
+  }
+
+  function animar() {
+    const { p, gotas, ancho } = construir();
+    const len = p.getTotalLength();
+    const t1 = Math.max(650, len / VEL * 1000);
+    const t2 = Math.max(1400, ancho * 1.08 / VEL * 1000);
+    p.style.strokeDasharray = len;
+    p.style.strokeDashoffset = len;
+    p.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
+      { duration: t1, delay: 120, easing: 'cubic-bezier(.35,0,.9,1)', fill: 'forwards' });
+    gotas.forEach(g => g.animate([{ opacity: 0, transform: 'scale(0)' }, { opacity: 1, transform: 'scale(1.3)', offset: .5 }, { opacity: 1, transform: 'scale(1)' }],
+      { duration: 380, delay: 120 + t1 * (+g.dataset.t) + 60, easing: 'ease-out', fill: 'backwards' }));
+    gotas.forEach(g => { g.style.transformBox = 'fill-box'; g.style.transformOrigin = 'center'; });
+    logo.style.animationDuration = t2 + 'ms';
+    logo.style.animationTimingFunction = 'cubic-bezier(.15,.3,.45,1)';
+    logo.querySelectorAll('.deco').forEach(d => d.style.setProperty('--t', Math.round((+d.dataset.at || 0) * t2) + 'ms'));
+    setTimeout(() => logo.classList.add('is-writing'), 120 + t1 - 40);
+    setTimeout(() => { dibujado = true; hero.classList.add('is-escrito'); }, 120 + t1 + t2 - 150);
+  }
+
+  if (reduce || !taza.getAnimations().length) {
+    requestAnimationFrame(finalEstatico);
+  } else {
+    taza.addEventListener('animationend', animar, { once: true });
+  }
+  let t;
+  addEventListener('resize', () => {
+    clearTimeout(t);
+    t = setTimeout(() => { if (dibujado) construir(); }, 150);
+  });
+})();
+
+
+;
+/* MIMOSA: boton envoltorio aprobado */
+(() => {
+  'use strict';
+  if (window.MimosaParcel) { window.MimosaParcel.mount(); return; }
+  const style = document.createElement('style');
+  style.id = 'mimosa-parcel-styles';
+  style.textContent = ".mimosa-parcel {\n  --mp-ink: #572326; --mp-paper: #e9e2d4; --mp-gold: #ddc47c;\n  --mp-ease: cubic-bezier(.2,.75,.25,1.15);\n  position: relative !important; display: inline-flex !important;\n  align-items: center; justify-content: center; isolation: isolate;\n  width: 218px; min-height: 64px; padding: 0 24px !important;\n  border: 0 !important; border-radius: 0 !important;\n  background: transparent !important; color: var(--mp-paper) !important;\n  text-decoration: none !important; box-shadow: none !important;\n  overflow: visible !important; transform: none !important;\n  font: italic 17px/1.2 var(--mp-font, 'LTC Remington Typewriter Pro', 'Courier New', monospace);\n  -webkit-tap-highlight-color: transparent;\n}\n.mimosa-parcel *, .mimosa-parcel *::before, .mimosa-parcel *::after {box-sizing:border-box}\n.mimosa-parcel::before, .mimosa-parcel::after {display:none !important}\n.mimosa-parcel > .mp-label { position: relative; z-index: 4; display:flex; align-items:center; gap:17px; transition:color 250ms; white-space:nowrap; pointer-events:none; }\n.mimosa-parcel .mp-arrow { display:inline-block; font-style:normal; transition:transform 550ms var(--mp-ease); }\n.mimosa-parcel .mp-paper { position:absolute; inset:0; pointer-events:none; }\n.mimosa-parcel .mp-filling {position:absolute; inset:3px 6px; background:var(--mp-gold); border-radius:46% 48% 42% 45% / 14% 13% 16% 15%; transform:scale(.92,.84); transition:transform 650ms var(--mp-ease);}\n.mimosa-parcel .mp-fold { position:absolute; left:0; width:100%; height:52%; background:var(--mp-ink); z-index:2; transition:transform 650ms var(--mp-ease), background 300ms; }\n.mimosa-parcel .mp-fold::after {content:''; position:absolute; left:13px; right:13px; height:1px; background:var(--mp-paper); opacity:.2; }\n.mimosa-parcel .mp-fold--top {top:0; transform-origin:50% 100%; clip-path:polygon(0 11%,2% 0,4% 10%,6% 0,8% 10%,10% 0,12% 10%,14% 0,16% 10%,18% 0,20% 10%,22% 0,24% 10%,26% 0,28% 10%,30% 0,32% 10%,34% 0,36% 10%,38% 0,40% 10%,42% 0,44% 10%,46% 0,48% 10%,50% 0,52% 10%,54% 0,56% 10%,58% 0,60% 10%,62% 0,64% 10%,66% 0,68% 10%,70% 0,72% 10%,74% 0,76% 10%,78% 0,80% 10%,82% 0,84% 10%,86% 0,88% 10%,90% 0,92% 10%,94% 0,96% 10%,98% 0,100% 11%,99% 100%,1% 100%);}\n.mimosa-parcel .mp-fold--top::after {top:8px}\n.mimosa-parcel .mp-fold--bottom {bottom:0; clip-path:polygon(1% 0,99% 0,100% 89%,98% 100%,96% 90%,94% 100%,92% 90%,90% 100%,88% 90%,86% 100%,84% 90%,82% 100%,80% 90%,78% 100%,76% 90%,74% 100%,72% 90%,70% 100%,68% 90%,66% 100%,64% 90%,62% 100%,60% 90%,58% 100%,56% 90%,54% 100%,52% 90%,50% 100%,48% 90%,46% 100%,44% 90%,42% 100%,40% 90%,38% 100%,36% 90%,34% 100%,32% 90%,30% 100%,28% 90%,26% 100%,24% 90%,22% 100%,20% 90%,18% 100%,16% 90%,14% 100%,12% 90%,10% 100%,8% 90%,6% 100%,4% 90%,2% 100%,0 89%); transform-origin:50% 0;}\n.mimosa-parcel .mp-fold--bottom::after {bottom:8px}\n.mimosa-parcel .mp-note {position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font:italic 10px/1 'Courier New',monospace; letter-spacing:.07em; opacity:0; transition:opacity 200ms; color:var(--mp-paper);}\n.mimosa-parcel .mp-flower {position:absolute; display:block; width:48px; height:48px; background:var(--mp-gold); mask:var(--mp-flower) center/contain no-repeat; -webkit-mask:var(--mp-flower) center/contain no-repeat; transform:translate(0,0) rotate(0) scale(.12); opacity:0; transition:transform 750ms var(--mp-ease),opacity 250ms; z-index:1;}\n.mimosa-parcel .mp-flower--a {left:1px; top:-9px; --mp-x:-27px; --mp-y:-27px; --mp-r:-29deg; background:#be7b65;}\n.mimosa-parcel .mp-flower--b {right:0; top:-6px; width:34px; height:38px; --mp-x:15px; --mp-y:-26px; --mp-r:32deg; background:#8fabba; transition-delay:50ms;}\n.mimosa-parcel .mp-flower--c {left:19px; bottom:-7px; width:27px; height:30px; --mp-x:-22px; --mp-y:21px; --mp-r:-57deg; background:#8fabba; transition-delay:90ms;}\n.mimosa-parcel .mp-flower--d {right:13px; bottom:-7px; width:37px; height:40px; --mp-x:20px; --mp-y:23px; --mp-r:48deg; background:#be7b65; transition-delay:130ms;}\n.mimosa-parcel .mp-seal {position:absolute; width:29px; height:32px; right:-12px; top:17px; z-index:5; background:var(--mp-gold); mask:var(--mp-flower) center/contain no-repeat; -webkit-mask:var(--mp-flower) center/contain no-repeat; transition:transform 650ms var(--mp-ease),opacity 200ms;}\n.mimosa-parcel:is(:focus-visible,.mp-open) {color:var(--mp-ink) !important;}\n.mimosa-parcel:is(:focus-visible,.mp-open) .mp-fold--top {transform:translateY(-21px) rotate(-4deg) scaleY(.82)}\n.mimosa-parcel:is(:focus-visible,.mp-open) .mp-fold--bottom {transform:translateY(21px) rotate(3deg) scaleY(.82)}\n.mimosa-parcel:is(:focus-visible,.mp-open) .mp-note {opacity:1; transition-delay:160ms}\n.mimosa-parcel:is(:focus-visible,.mp-open) .mp-filling {transform:scale(1,1)}\n.mimosa-parcel:is(:focus-visible,.mp-open) .mp-flower {opacity:1;transform:translate(var(--mp-x),var(--mp-y)) rotate(var(--mp-r)) scale(1)}\n.mimosa-parcel:is(:focus-visible,.mp-open) .mp-seal {transform:translate(13px,-24px) rotate(80deg) scale(.3);opacity:0}\n.mimosa-parcel:is(:focus-visible,.mp-open) .mp-arrow {transform:translateX(3px) rotate(-35deg)}\n.mimosa-parcel:active .mp-label {transform:scale(.95)}\n.mimosa-parcel:focus-visible {outline:2px solid var(--mp-ink);outline-offset:30px}\n.hero__ctas:has(.mimosa-parcel) {gap:42px; padding-top:17px; padding-bottom:30px; align-items:center;}\n@media(max-width:480px) {\n  .hero__ctas:has(.mimosa-parcel) {flex-direction:column;gap:40px;}\n  .mimosa-parcel {width:210px;}\n}\n@media(prefers-reduced-motion:reduce) {\n  .mimosa-parcel *, .mimosa-parcel *::before, .mimosa-parcel *::after {transition:none !important;animation:none !important;}\n}\n\n.mimosa-parcel {--mp-flower:url(\"data:image/svg+xml;base64,PHN2ZyBmaWxsPSJjdXJyZW50Q29sb3IiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDEwNy44NyAxMjAuNTYiPg0KICA8Zz4NCiAgICA8cGF0aCBkPSJNODUuNTIsMTAyLjE0Yy0uMDIsMS43MS0uMzksMy4wNi0xLjI4LDQuMzktMSwxLjUtMi4xOCwyLjczLTMuNiwzLjg2LTEuMzMsMS4wNi0yLjY3LDEuOTgtNC4zMSwyLjU0LTEuMTUuMzktMi4xNSwxLjAzLTMuMTQsMS43NGwtMiwxLjQyYy0xLjc2LjkxLTMuNywxLjI2LTUuNjksMS4xN2wtMi4yLjA1LTMuNTItLjAyYy0uOTUsMC0xLjg1LS41OC0yLjU2LTEuMThsLTIuNTgtMi4yYy0xLjI1LTEuMDctMi41LTItMy45OS0yLjcycy0yLjU5LTEuODMtMy43Ni0yLjkzYy0uOTYtLjkxLTIuMDItMS41OC0zLjEzLTIuMjYtLjcyLS40NC0xLjI2LTEuMDQtMS42My0xLjgxLTEuMTYtMi4zOS0xLjY5LTQuOTItMS44MS03LjY1LS40MS45OC0uNTYsMS45OS0uNzgsMy4wM2wtLjg5LDQuMzdjLS4zNiwxLjc1LS45NiwzLjM0LTEuOCw0LjktLjQyLjc4LS43NywxLjU0LS45OSwyLjM2LjYzLjc4LDEuMTEsMS43LDEuMDEsMi42OWwtLjM3LDMuNTNjLS4xMSwxLjA5LTEuNDksMy4zLTMuMTMsMy4xM2wtNC4wMS0uNDFjLTEuNDUtLjE1LTIuNjgtLjk2LTMuNDgtMi4xMy0uNjUtLjk1LS43Ni0xLjk3LS41NC0zLjA4bC40NS0yLjM3Yy44NS0yLjA5LDIuOTktMy4zMiw1LjI0LTMuMTFsMi44OS40NmMuMTYtMS4xOS42NC0yLjI4LDEuMjItMy4zNi44NC0xLjU4LDEuNDUtMy4xNywxLjgtNC45M2wxLjE5LTUuOTJjLTEuMjUuOTctMi42MSwxLjUtNC4wMSwyLjE1LTIuNjYsMS4yMy01LjQ1LDEuNTUtOC4zNC45NWwtNy4zNy0xLjUzYy0zLjkzLS44Mi04LjAzLTIuMTEtMTAuOTYtNC45NGwtMi45Ny0yLjg4Yy0xLjA5LTEuMDUtMi4wMi0yLjEyLTIuMjEtMy42OS0uMTItMS4wMi0uMjktMi4wOC0uMDctMy4xMWwxLjQ2LTYuNzIuOTMtMi4yMy45Ni0yLjk3Yy45Ni0yLjk3LDIuMTgtMi43LDQuMzYtNC42NSwxLjI2LTEuMTIsMi44NC0xLjY0LDQuNS0xLjc0czMuMDgtLjQxLDQuNjMtLjc1bDQuODMtMS4wNWMtMi45Mi0uNTItNS42LTEuMTItOC4zOC0xLjg0LTIuMzEtLjYtNC41Ny0uOS02Ljk4LTEuMjkuMDkuNzMtLjAzLDEuMjQtLjQ1LDEuNzUuMDMuOTUtLjQyLDIuMDItMS4zNywyLjI5bC0yLjI5LjA4Yy0uNzEuMDMtMS4yOS0uMjMtMS43Ny0uNzQtMS4xMy0uMjUtMi4zMS0uOTQtMi42LTIuMTNsLS4wOC0yLjMxYy4wMy0uNzUuMjYtMS40NC44MS0xLjk0LjI3LTEuMDcsMS4xOS0xLjY3LDIuMjktMS42NCwyLjQzLjA4LDMuMjItLjE1LDUuMjMsMi4xLjg4LjUxLDIuMDYuNjcsMy4wOC44NSwyLjk5LjUyLDUuODEsMS4xNCw4LjgsMS44OS0xLjc0LTEuMTMtNC43MS0xLjk5LTYuMDItMy4zMmwtMS45My0xLjk2Yy0uOTgtMS0xLjU0LTIuMjctMi4zNC0zLjQybC0yLjI1LTMuMjRjLTEuNTItMi4xOS0yLjItNC43MS0yLjMxLTcuMzhsLS4xNy00LjUzYy0uMDQtMS4wNi0uMDktMi4wOS4xNi0zLjEzbDEuNTktNi43MWMuNTQtMi4yNiwzLTYuMjgsNS4wOS03Ljg0bDIuNTktMS45NGMuOTItLjY5LDIuMjUtMS4yNywzLjQxLS45Mmw2LjQ3LDEuOTRjMy4wOC45Myw3Ljg4LDMuOTIsMTAuNyw1LjkybC0uMzYtMi44NWMtLjQxLTMuMjQtMS4yOS02LjQ2LS43MS05LjktLjk3LjQtMS45LjMxLTIuNjctLjMtMS40MS0xLjEtMi4xMi0yLjc1LTIuNDYtNC40OS0uMTgtLjkzLS40Ny0xLjc2LS4zNC0yLjY5QzI5LjAxLjM5LDMwLjk0LjUzLDMzLjM3LDBjLjcyLS4wMSwxLjM0LDAsMS45Ny4zMywxLjQ3LjA4LDIuOCwxLjE1LDMuMTYsMi41OGwuNTYsMi4yNGMuMTQsMS42MS0uNzgsMy4wMi0yLjAzLDQuMDFsLS40NSwzLjUyYy0uMTcsMS4zNC0uMDUsMi42Ni4xNywzLjk4bC44OCw1LjM3LDEuNTMtNS4yN2MuMjItLjc3LjY4LTEuMywxLjE4LTEuODgsMS41OC0xLjg0LDMuNDUtMy4yOSw1LjYtNC40MWwzLjU0LTEuODRjMi41My0xLjMxLDYuMzctMi4wMiw5LjI3LTIuMy43Ni0uMDcsMS40MS0uMDUsMi4xMi4ybDUuNjQsMi4wNGMxLjAxLjM3LDEuODQsMS4xNiwyLjU3LDEuOTYsMS4xNywxLjI5LDIuMjMsMi42NCwyLjcyLDQuMzUuOTYsMy4zLDEuNzcsOC4wMS42NCwxMS4yMmwtMS45OSw1LjY0LDEuNjYtMS42OSwyLjk1LTIuNjhjMS44MS0xLjY1LDMuNDgtMy4yOSw1LjYyLTQuNzItMS44MS0uOTYtMS42Mi0zLjQxLS41NS01LjExLjItLjMyLjI0LS43Ni41OC0xLjAybC42Ny0uMDMsMi44NC0xLjA3Yy40OC0uMTgsMS4xNy0uMzIsMS42Ni0uMSwyLjM4LDEuMDUsMi4wNC44NiwyLjQ3LDIuNDdsLjMyLDEuMi4yNSwyLjE4Yy4xNCwxLjI0LS42MywyLjAxLTEuNjIsMi40Ny0uNzkuMzctMS40Ny43Mi0yLjQxLjc5bC0yLjEyLjE1Yy0xLjgzLDEuMTgtMy4zNiwyLjYxLTQuOTcsNC4wNmwtMy4yOCwyLjk2Yy0xLjExLDEtMi4wOSwyLjAzLTIuOTYsMy4zLDEuNzUtLjc3LDMuNzYtMi44MSw1LjQ3LTMuMTFsMi43LS40OGMyLjQzLS42MSw0LjgzLS45OSw3LjM1LS44NWw0LjM5LjI0YzIsLjExLDQuMDEuMDksNS45My43NGw2LjU5LDIuNjRjLjgyLjMzLDEuMywxLjA2LDEuNiwxLjgzbC43LDIuOTguNjUsMy45Ny40OSwzLjNjLjI3LDEuNzguNTUsMy41My4yOSw1LjM0bC0uMjQsMy4yMy0yLjU0LDYuOThjLS42MiwxLjcxLTEuNzYsMy4xNS0zLjAyLDQuNDEtLjUxLjUxLTEuMjQuNy0xLjg5LjkzbC0yLjUzLjljLS44OC4zMS0xLjc5LjU4LTIuNzYuNTYtMS40Ny0uMDMtMi44My4xMy00LjI2LjUtMy41OS45MS04Ljk3LDIuMDUtMTIuMzUsMS4wNmwtNi42LTEuOTMtMy44NC0xLjdjLS4xNy0uMS0uMjIuMTYsMCwuMTUsMS4zNCwxLjIsMi43NSwyLjE0LDQuMjMsMy4xMiwxLjg5LDEuMjUsMy43MywyLjM4LDUuNzYsMy40LDIuNTQsMS4yNyw0LjczLDIuODcsNi44Nyw0LjcyLDEuMzcsMS4xOCwyLjgxLDIuMTEsNC40MiwyLjkxbDMuMTksMS41OGMuMDgtMS4xOS43OS0xLjk1LDEuODctMi4yMiwxLjM2LS4zMywyLjYxLjA2LDMuOTIuNDMsMS40OS40MiwyLjc3LDEuMTQsMy4zMywyLjY4LjE0LjM3LjE5Ljg0LjA0LDEuMjdsLS44MywyLjQ4Yy0uMzEuOTEtMi40OCwyLjk3LTQuMDksMi40NWwtMi43OC0uODljLTEuNDEtLjcxLTIuMS0yLjMzLTIuMDgtMy45bC01LjU4LTIuODJjLTEuNTMtLjc3LTIuODQtMS43MS00LjE1LTIuODItMi4xNS0xLjgyLTQuMzQtMy41LTYuOTgtNC42NiwxLjAxLjk1LDEuOTEsMS43OCwyLjYyLDIuOTMsMS45NiwzLjE2LDMuMjksNi41NSw0LjI2LDEwLjE0LjU4LDIuMTYsMS40Nyw0LjEyLDIuNzIsNS45NS43MSwxLjA0LDEuMSwyLjA4LDEuMDksMy4zN2wtLjA1LDUuNDJaIi8+DQogIDwvZz4NCjwvc3ZnPg==\")}";
+  document.head.append(style);
+  function mount(selector = '.hero__ctas > a[href="carta.html"], [data-mimosa-parcel]') {
+    document.querySelectorAll(selector).forEach(link => {
+      if (link.classList.contains('mimosa-parcel')) return;
+      const label = link.dataset.mimosaLabel || 'Ver la carta';
+      const font = getComputedStyle(link).fontFamily;
+      link.style.setProperty('--mp-font', font);
+      link.classList.add('mimosa-parcel');
+      const text = document.createElement('span');
+      text.className = 'mp-label';
+      text.textContent = label + ' ';
+      const arrow = document.createElement('span');
+      arrow.className = 'mp-arrow'; arrow.textContent = '→'; arrow.setAttribute('aria-hidden', 'true');
+      text.append(arrow);
+      const paper = document.createElement('span');
+      paper.className = 'mp-paper'; paper.setAttribute('aria-hidden', 'true');
+      paper.innerHTML = '<span class="mp-filling"></span><span class="mp-flower mp-flower--a"></span><span class="mp-flower mp-flower--b"></span><span class="mp-flower mp-flower--c"></span><span class="mp-flower mp-flower--d"></span><span class="mp-fold mp-fold--top"><span class="mp-note">un pequeño capricho</span></span><span class="mp-fold mp-fold--bottom"><span class="mp-note">hecho con mucho mimo</span></span><span class="mp-seal"></span>';
+      link.replaceChildren(paper, text);
+      let lastPointer = '', pendingNavigation = null;
+      function reset() {
+        clearTimeout(pendingNavigation);
+        pendingNavigation = null;
+        lastPointer = '';
+        link.classList.remove('mp-open');
+        link.removeAttribute('aria-busy');
+      }
+      link.addEventListener('pointerenter', e => { if(e.pointerType !== 'touch') link.classList.add('mp-open'); });
+      link.addEventListener('pointerleave', () => {
+        if (pendingNavigation === null) link.classList.remove('mp-open');
+      });
+      link.addEventListener('pointerdown', e => {
+        lastPointer = e.pointerType;
+        if (e.pointerType !== 'touch') link.classList.add('mp-open');
+      });
+      link.addEventListener('pointercancel', reset);
+      link.addEventListener('blur', reset);
+      link.addEventListener('click', e => {
+        // Only a completed, ordinary touch tap waits. Scrolling/holding never navigates.
+        const touch = e.detail !== 0 && (e.pointerType || lastPointer) === 'touch';
+        lastPointer = '';
+        if (pendingNavigation !== null) { e.preventDefault(); return; }
+        if (!touch || e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey ||
+            link.hasAttribute('download') || (link.target && link.target !== '_self') ||
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        e.preventDefault();
+        link.classList.add('mp-open');
+        link.setAttribute('aria-busy', 'true');
+        pendingNavigation = setTimeout(() => {
+          const destination = link.href;
+          reset();
+          window.location.assign(destination);
+        }, 900);
+      });
+      window.addEventListener('pagehide', reset);
+      window.addEventListener('pageshow', reset);
+    });
+  }
+  window.MimosaParcel = { mount };
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => mount(), {once:true});
+  else mount();
+})();
+
+
+/* Carta: «ver fotos» abre la galería de esa categoría */
+document.querySelectorAll('[data-fotos]').forEach(b => b.addEventListener('click', () => {
+  const f = document.querySelector('.carta-fotos [data-zoom="' + b.dataset.fotos + '"]');
+  if (f) f.click();
+}));

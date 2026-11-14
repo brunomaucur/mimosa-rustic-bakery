@@ -3,33 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mimosa · Rustic Bakery en San Agustín, Gran Canaria</title>
+<title>Mimosa · Rustic Bakehouse en San Agustín, Gran Canaria</title>
 <meta name="description" content="Cafetería y repostería rústica en la Plaza de los Cocoteros, San Agustín. Cookies, tartas, café y encargos hechos con mucho mimo.">
-<meta name="theme-color" content="#f4efe7">
-<meta property="og:title" content="Mimosa · Rustic Bakery en San Agustín, Gran Canaria">
+<meta name="theme-color" content="#E9E2D4">
+<meta property="og:title" content="Mimosa · Rustic Bakehouse en San Agustín, Gran Canaria">
 <meta property="og:description" content="Cafetería y repostería rústica en la Plaza de los Cocoteros, San Agustín. Cookies, tartas, café y encargos hechos con mucho mimo.">
 <meta property="og:image" content="img/og-mimosa.jpg">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script>document.documentElement.classList.add('js', 'fuente-mimosa')</script>
 <link rel="preload" href="fonts/trazo-muestrario.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/compagnon-italic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=20261107140805">
-<link rel="preload" as="image" href="media/cafe-inicio.jpg?v=20261107140805">
+<link href="https://fonts.googleapis.com/css2?family=Cutive&family=Mr+De+Haviland&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css?v=20261114175530">
+<link rel="stylesheet" href="css/marca.css?v=20261114175530">
+
 </head>
 <body data-page="index">
 
-<header class="header on-dark">
+<header class="header">
   <div class="header__in">
-    <a class="brand" href="index.html" aria-label="Mimosa, inicio"><span class="logo-icon" aria-hidden="true"></span><span class="brand__name">Mimosa</span><span class="brand__tag">Rustic bakery</span></a>
+    <a class="brand" href="index.html" aria-label="Mimosa Rustic Bakehouse, inicio"><span class="brand__logo" aria-hidden="true"></span><span class="brand__tag">Rustic Bakehouse</span></a>
     <nav class="nav" aria-label="Principal">
       <a href="index.html" aria-current="page">Inicio</a>
       <a href="carta.html">La carta</a>
       <a href="nosotros.html">Nosotros</a>
       <a href="eventos.html">Eventos y talleres</a>
       <a href="visitanos.html">Visítanos</a>
+      <a href="preguntas.html">Preguntas</a>
     </nav>
     <a class="btn" href="carta.html#encargos" data-wa="Hola Mimosa, me gustaría encargar una tarta.">Encargar una tarta</a>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobileMenu"><span>Menú</span><i></i></button>
@@ -43,43 +46,97 @@
     <a class="big" href="nosotros.html">Nosotros</a>
     <a class="big" href="eventos.html">Eventos</a>
     <a class="big" href="visitanos.html">Visítanos</a>
+    <a class="big" href="preguntas.html">Preguntas</a>
   </nav>
   <div class="meta"><span>Mié – Dom · 09:00 – 17:00</span><a href="https://www.instagram.com/mimosarusticbakery/" target="_blank" rel="noopener">Instagram ↗</a></div>
 </div>
 
 <main>
-<section class="hero" aria-label="Mimosa">
-  <video class="hero__media" muted playsinline autoplay preload="auto" poster="media/cafe-inicio.jpg?v=20261107140805" aria-hidden="true">
-    <source src="media/cafe-derramado-movil.mp4?v=20261107140805" type="video/mp4" media="(max-width: 760px)">
-    <source src="media/cafe-derramado.mp4?v=20261107140805" type="video/mp4">
-  </video>
-  <div class="hero__shade"></div>
-  <button class="skip-video" type="button">Saltar</button>
-  <div class="hero__content">
-    <div class="wrap hero__grid">
-      <div>
-        <p class="label" data-hero="2">Rustic bakery — San Agustín, Gran Canaria</p>
-        <h1 class="display" data-hero="2">Hecho con<br><em>mucho mimo</em></h1>
-      </div>
-      <div class="hero__side">
-        <div class="hero__ctas" data-hero="4">
-          <a class="btn btn--light" href="carta.html">Ver la carta <span class="arr">→</span></a>
-          <a class="btn btn--line-light" href="visitanos.html">Cómo llegar</a>
-        </div>
-      </div>
+<section class="hero hero--marca portada-cafe" aria-label="Mimosa Rustic Bakehouse">
+  <svg class="cafe-rastro" aria-hidden="true"></svg>
+  <div class="cafe-taza" aria-hidden="true">
+    <svg viewBox="-14 0 122 100">
+      <path d="M17 30 C-5 27 -7 63 22 66" fill="none" stroke="#8FABBA" stroke-width="9" stroke-linecap="round"/>
+      <path d="M14 15 Q14 10 19 10 H89 Q94 10 94 15 L88 77 Q86 92 71 92 H37 Q22 92 20 77 Z" fill="#8FABBA"/>
+      <path d="M20.5 70 H87.5" stroke="#BE7B65" stroke-width="3"/>
+      <path d="M21.5 76 H86.8" stroke="#DDC47C" stroke-width="2"/>
+      <image href="img/marca/logotipo-crema.svg?v=20261114175530" x="25" y="36" width="58" height="12.2"/>
+      <ellipse cx="54" cy="13.5" rx="38" ry="5" fill="#572326"/>
+      <ellipse cx="54" cy="12.5" rx="39.5" ry="5.6" fill="none" stroke="#7a97a6" stroke-width="2.5"/>
+      <circle class="cafe-boca" cx="54" cy="12" r="1" fill="none"/>
+    </svg>
+  </div>
+  <div class="hero-marca__in">
+    <h1 class="sr-only">Mimosa Rustic Bakehouse</h1>
+    <div class="vierte" aria-hidden="true">
+      <span class="deco deco--ovalo c-oro" data-at=".9"></span>
+      <span class="deco ilus ilus--flor-1 c-melocoton" data-at=".16" style="--x:15%;--y:-78%;--w:13%;--r:-12deg"></span>
+      <span class="deco ilus ilus--isotipo c-oro" data-at=".52" style="--x:52%;--y:-66%;--w:7.5%;--r:8deg"></span>
+      <span class="deco ilus ilus--ramita c-melocoton" data-at=".66" style="--x:66%;--y:88%;--w:7%;--r:-28deg"></span>
+      <span class="deco ilus ilus--flor-2 c-azul" data-at=".86" style="--x:86%;--y:-86%;--w:12%;--r:14deg"></span>
+      <span class="deco ilus ilus--flor-3 c-melocoton" data-at=".98" style="--x:101%;--y:38%;--w:7%;--r:-10deg"></span>
+      <span class="vierte__logo"></span>
+      <i class="vierte__gota g1"></i><i class="vierte__gota g2"></i><i class="vierte__gota g3"></i><i class="vierte__gota g4"></i>
     </div>
+    <p class="cafe-lema">hecho con mucho mimo</p>
+    <div class="hero__ctas cafe-ctas">
+      <a class="btn" href="carta.html">Ver la carta <span class="arr">→</span></a>
+      <a class="btn btn--ghost" href="visitanos.html">Visítanos</a>
+    </div>
+  </div>
+  <div class="cafe-deco" aria-hidden="true">
+    <span class="deco-fin deco-lineas c-melocoton"></span>
+    <span class="deco-fin ilus ilus--flor-1 c-azul" style="--d:.15s"></span>
+    <span class="deco-fin ilus ilus--ramita c-burdeos" style="--d:.3s"></span>
+    <span class="deco-fin ilus ilus--flor-2 c-melocoton" style="--d:.45s"></span>
+    <span class="deco-fin deco-mancha c-burdeos" style="--d:.1s"></span>
   </div>
   <span class="scroll-cue" aria-hidden="true"></span>
 </section>
 
-<section class="section section--intro">
-  <div class="wrap">
-    <div class="statement">
-      <p class="label" data-reveal>La casa de Mimosa</p>
-      <div>
-        <p class="big" data-reveal>Un rincón en la Plaza de los Cocoteros con cookies gorditas, tartas con flores y café para <em>quedarse un rato</em>.</p>
-        <a class="link" href="nosotros.html" data-reveal>Conoce nuestra historia →</a>
-      </div>
+<section class="mesa" aria-label="Siéntate a la mesa">
+  <div class="mesa__in">
+    <p class="mesa__hola" data-reveal>siéntate, que ya te lo traemos</p>
+    <span class="mesa__servilleta" aria-hidden="true" data-reveal style="--fx:-60vw;--fy:10vh;--fr:-40deg;--r:-9deg;--d:.05s"></span>
+    <a class="mesa__obj mesa__taza" href="carta.html#cafe" data-reveal style="--fx:-70vw;--fy:-10vh;--fr:-60deg;--r:6deg;--d:.15s">
+      <span class="mesa__plato"><span class="mesa__cafe"><img src="img/mesa/taza.webp?v=20261114175530" alt="Café con leche con latte art visto desde arriba" decoding="async"></span></span>
+      <span class="mesa__nota">el café <span class="arr">→</span></span>
+    </a>
+    <a class="mesa__obj mesa__cookies" href="carta.html#cookies" data-reveal style="--fx:70vw;--fy:-20vh;--fr:50deg;--r:-4deg;--d:.3s">
+      <img src="img/mesa/cookies.webp?v=20261114175530" alt="Plato de cookies recién horneadas visto desde arriba" decoding="async">
+      <span class="mesa__nota">recién horneadas <span class="arr">→</span></span>
+    </a>
+    <a class="mesa__obj mesa__carta" href="carta.html" data-reveal style="--fx:10vw;--fy:70vh;--fr:-30deg;--r:-3deg;--d:.45s">
+      <span class="mesa__carta-cab">Mimosa · la carta</span>
+      <span class="mesa__carta-lista">
+        <span><b>Cookies</b><i></i><em>y brownies</em></span>
+        <span><b>Tartas</b><i></i><em>por porciones</em></span>
+        <span><b>Bollería</b><i></i><em>recién hecha</em></span>
+        <span><b>Café</b><i></i><em>y bebidas</em></span>
+      </span>
+      <span class="mesa__carta-pie">ver la carta completa →</span>
+    </a>
+    <span class="ilus ilus--ramita c-burdeos mesa__flor m1" aria-hidden="true" data-reveal style="--fx:40vw;--fy:60vh;--fr:90deg;--r:-32deg;--d:.6s"></span>
+    <span class="ilus ilus--flor-1 c-melocoton mesa__flor m2" aria-hidden="true" data-reveal style="--fx:-30vw;--fy:50vh;--fr:-120deg;--r:12deg;--d:.7s"></span>
+    <span class="ilus ilus--flor-3 c-azul mesa__flor m3" aria-hidden="true" data-reveal style="--fx:30vw;--fy:-40vh;--fr:140deg;--r:-6deg;--d:.75s"></span>
+    <i class="mesa__miga a" aria-hidden="true"></i><i class="mesa__miga b" aria-hidden="true"></i><i class="mesa__miga c" aria-hidden="true"></i>
+  </div>
+</section>
+
+<div class="ribbon" aria-hidden="true"><div class="ribbon__track"><span class="ribbon__logo c-melocoton"></span><span class="ribbon__logo c-azul"></span><span class="ribbon__logo c-oro"></span><span class="ribbon__logo c-melocoton"></span><span class="ribbon__logo c-azul"></span><span class="ribbon__logo c-oro"></span><span class="ribbon__logo c-melocoton"></span><span class="ribbon__logo c-azul"></span><span class="ribbon__logo c-oro"></span><span class="ribbon__logo c-melocoton"></span><span class="ribbon__logo c-azul"></span><span class="ribbon__logo c-oro"></span><span class="ribbon__logo c-melocoton"></span><span class="ribbon__logo c-azul"></span><span class="ribbon__logo c-oro"></span><span class="ribbon__logo c-melocoton"></span><span class="ribbon__logo c-azul"></span><span class="ribbon__logo c-oro"></span><span class="ribbon__logo c-melocoton"></span><span class="ribbon__logo c-azul"></span><span class="ribbon__logo c-oro"></span><span class="ribbon__logo c-melocoton"></span><span class="ribbon__logo c-azul"></span><span class="ribbon__logo c-oro"></span><span class="ribbon__logo c-melocoton"></span><span class="ribbon__logo c-azul"></span><span class="ribbon__logo c-oro"></span><span class="ribbon__logo c-melocoton"></span><span class="ribbon__logo c-azul"></span><span class="ribbon__logo c-oro"></span><span class="ribbon__logo c-melocoton"></span><span class="ribbon__logo c-azul"></span><span class="ribbon__logo c-oro"></span><span class="ribbon__logo c-melocoton"></span><span class="ribbon__logo c-azul"></span><span class="ribbon__logo c-oro"></span></div></div>
+
+<section class="section que-es">
+  <div class="wrap que-es__grid">
+    <div class="que-es__panel" data-reveal>
+      <p class="label">¿Qué es Mimosa?</p>
+      <p class="big">Una repostería artesanal que nace del cariño por el trabajo hecho con mimo, el cuidado por los detalles y las ganas de crear momentos para recordar.</p>
+      <p>Inspirada en la flor que le da nombre, Mimosa representa la calma, la autenticidad y la belleza de lo imperfecto. Un rincón en la Plaza de los Cocoteros con tartas, cookies y buen café para quedarse un rato.</p>
+      <a class="link" href="nosotros.html">Conoce nuestra historia →</a>
+    </div>
+    <div class="que-es__flores" aria-hidden="true">
+      <span class="ilus ilus--flor-3 c-azul f1"></span>
+      <span class="ilus ilus--flor-1 c-azul f2"></span>
+      <span class="ilus ilus--ramita c-oro f3"></span>
     </div>
   </div>
 </section>
@@ -89,39 +146,34 @@
     <div class="section-head">
       <div>
         <p class="label" data-reveal>De la vitrina</p>
-        <h2 class="h2" data-reveal>Lo que sale<br>del horno</h2>
+        <h2 class="h2 with-deco" data-reveal>lo que sale<br>del horno<span class="ilus ilus--flor-2 c-melocoton deco-title" aria-hidden="true"></span></h2>
       </div>
       <a class="btn btn--ghost" href="carta.html" data-reveal>Ver la carta completa <span class="arr">→</span></a>
     </div>
   </div>
-  <div class="loop" data-loop>
-    <div class="loop__track">
-      <a class="product" href="carta.html#cookies"><div class="ph ph--45"><img src="img/cookies-brownies.jpg" alt="Cookies y brownies" loading="lazy"></div><h3>Cookies y brownies</h3><p>Chocolate con sal, chocolate y galletas…</p></a>
-      <a class="product" href="carta.html#cookies"><div class="ph ph--45"><img src="img/cookies-pistacho.jpg" alt="Cookies de pistacho y chocolate" loading="lazy"></div><h3>Cookies de pistacho</h3><p>Verdes, con pistacho picado.</p></a>
-      <a class="product" href="carta.html#tartas"><div class="ph ph--45"><img src="img/tarta-queso.jpg" alt="Porciones de tarta de queso" loading="lazy"></div><h3>Tarta de queso</h3><p>Cremosa, tostada por arriba.</p></a>
-      <a class="product" href="carta.html#tartas"><div class="ph ph--45"><img src="img/queque-limon.jpg" alt="Queque de limón y romero con flores" loading="lazy"></div><h3>Queque de limón y romero</h3><p>El favorito de la casa.</p></a>
-      <a class="product" href="carta.html#tartas"><div class="ph ph--45"><img src="img/red-velvet.jpg" alt="Tarta red velvet con frambuesas" loading="lazy"></div><h3>Red velvet</h3><p>Con frambuesas y crema.</p></a>
-      <a class="product" href="carta.html#bolleria"><div class="ph ph--45"><img src="img/croissants-pistacho.jpg" alt="Croissants de pistacho" loading="lazy"></div><h3>Croissants de pistacho</h3><p>Crujientes y con crema.</p></a>
-      <a class="product" href="carta.html#bolleria"><div class="ph ph--45"><img src="img/rollos-canela.jpg" alt="Rollos de canela glaseados" loading="lazy"></div><h3>Rollos de canela</h3><p>Glaseados y recién hechos.</p></a>
-      <a class="product" href="carta.html#tartas"><div class="ph ph--45"><img src="img/tarta-frutos-rojos.jpg" alt="Pavlova con frutos rojos y flores" loading="lazy"></div><h3>Pavlova</h3><p>Merengue, nata y frutos rojos.</p></a>
-      <a class="product" href="carta.html#tartas"><div class="ph ph--45"><img src="img/cupcakes.jpg" alt="Cupcakes de chocolate con crema" loading="lazy"></div><h3>Cupcakes</h3><p>Chocolate y crema batida.</p></a>
-      <a class="product" href="carta.html#bolleria"><div class="ph ph--45"><img src="img/brioches-flores.jpg" alt="Brioches con flores" loading="lazy"></div><h3>Brioches con flores</h3><p>Para desayunar sin prisa.</p></a>
+  <div class="wrap">
+    <div class="vitrina" data-reveal>
+      <div class="vitrina__luz" aria-hidden="true"></div>
+      <div class="vitrina__balda">
+      <a class="vit" href="carta.html#cookies" style="--tr:-3deg"><span class="vit__foto"><img src="img/cookies-brownies.jpg" alt="Cookies y brownies" loading="lazy"></span><span class="vit__eti"><b>Cookies y brownies</b><small>Chocolate con sal, chocolate y galletas…</small></span></a>
+      <a class="vit" href="carta.html#cookies" style="--tr:2deg"><span class="vit__foto"><img src="img/cookies-pistacho.jpg" alt="Cookies de pistacho y chocolate" loading="lazy"></span><span class="vit__eti"><b>Cookies de pistacho</b><small>Verdes, con pistacho picado.</small></span></a>
+      <a class="vit" href="carta.html#tartas" style="--tr:-1.5deg"><span class="vit__foto"><img src="img/tarta-queso.jpg" alt="Porciones de tarta de queso" loading="lazy"></span><span class="vit__eti"><b>Tarta de queso</b><small>Cremosa, tostada por arriba.</small></span></a>
+      <a class="vit" href="carta.html#tartas" style="--tr:3deg"><span class="vit__foto"><img src="img/queque-limon.jpg" alt="Queque de limón y romero con flores" loading="lazy"></span><span class="vit__eti"><b>Queque de limón y romero</b><small>El favorito de la casa.</small></span></a>
+      </div>
+      <div class="vitrina__balda">
+      <a class="vit" href="carta.html#tartas" style="--tr:-2.5deg"><span class="vit__foto"><img src="img/red-velvet.jpg" alt="Tarta red velvet con frambuesas" loading="lazy"></span><span class="vit__eti"><b>Red velvet</b><small>Con frambuesas y crema.</small></span></a>
+      <a class="vit" href="carta.html#tartas" style="--tr:3deg"><span class="vit__foto"><img src="img/carrot-cake.jpg" alt="Porción de carrot cake" loading="lazy"></span><span class="vit__eti"><b>Carrot cake</b><small>Especiada, con frosting suave.</small></span></a>
+      <a class="vit" href="carta.html#bolleria" style="--tr:-3deg"><span class="vit__foto"><img src="img/croissants-pistacho.jpg" alt="Croissants de pistacho" loading="lazy"></span><span class="vit__eti"><b>Croissants de pistacho</b><small>Crujientes y con crema.</small></span></a>
+      <a class="vit" href="carta.html#tartas" style="--tr:3deg"><span class="vit__foto"><img src="img/cupcakes.jpg" alt="Cupcakes de chocolate con crema" loading="lazy"></span><span class="vit__eti"><b>Cupcakes</b><small>Chocolate y crema batida.</small></span></a>
+      </div>
+      <div class="vitrina__cristal" aria-hidden="true"></div>
     </div>
-  </div>
-</section>
-
-<section class="band" aria-label="Eventos y talleres">
-  <div class="band__img"><img src="img/mesa-dulce.jpg" alt="Mesa dulce de Mimosa con cookies, brownies y frutas sobre mantel de cuadros" loading="lazy"></div>
-  <div class="wrap band__content">
-    <p class="label" data-reveal>Eventos · Talleres · Markets</p>
-    <h2 class="h2" data-reveal>Mesas dulces para celebrar a lo grande</h2>
-    <a class="btn btn--light" href="eventos.html" data-reveal>Descubre los eventos <span class="arr">→</span></a>
   </div>
 </section>
 
 <section class="section">
   <div class="wrap split">
-    <div class="ph ph--45" data-reveal="img"><img src="img/julia.jpg" alt="Julia, fundadora de Mimosa, en un market" loading="lazy"></div>
+    <div class="framed framed--rayas-melocoton"><div class="ph ph--45" data-reveal="img"><img src="img/julia.jpg" alt="Julia, fundadora de Mimosa, en un market" loading="lazy"></div></div>
     <div>
       <p class="label" data-reveal>Nosotros</p>
       <h2 class="h2" data-reveal>Detrás de Mimosa<br>está <em>Julia</em></h2>
@@ -132,7 +184,7 @@
   </div>
 </section>
 
-<section class="section section--alt">
+<section class="section bloque bloque--azul">
   <div class="wrap order">
     <div class="order__img"><figure class="ph ph--45 zoom" data-zoom="home-encargo" data-reveal="img"><img src="img/tarta-40.jpg" alt="Tarta de cumpleaños decorada con flores y velas" loading="lazy"></figure></div>
     <div>
@@ -165,16 +217,14 @@
       <figure class="zoom" data-zoom="home" data-reveal><img src="img/cesta-regalo.jpg" alt="Cesta regalo con flores" loading="lazy"><figcaption>Cestas regalo</figcaption></figure>
       <figure class="zoom" data-zoom="home" data-reveal><img src="img/cata-queso-mesa.jpg" alt="Cata de tarta de queso con clientes" loading="lazy"><figcaption>Cata de tarta de queso</figcaption></figure>
       <figure class="zoom" data-zoom="home" data-reveal><img src="img/julia-decorando.jpg" alt="Decorando una tarta con flores" loading="lazy"><figcaption>Detalles a mano</figcaption></figure>
-      <figure class="zoom" data-zoom="home" data-reveal><img src="img/brioches-flores.jpg" alt="Brioches con flores" loading="lazy"><figcaption>Brioches con flores</figcaption></figure>
     </div>
   </div>
 </section>
 
-<section class="mantel" aria-label="Visítanos">
+<section class="mantel mantel--marca" aria-label="Visítanos">
   <div class="wrap">
     <div class="card visit-card" data-reveal>
       <p class="label">Visítanos</p>
-      <h2 class="h2">Te guardamos<br>una mesa</h2>
       <ul class="hours">
         <li class="is-closed"><span>Lunes</span><span>Cerrado</span></li>
         <li class="is-closed"><span>Martes</span><span>Cerrado</span></li>
@@ -193,24 +243,27 @@
 
 <a class="wa-float" href="carta.html#encargos" data-wa="Hola Mimosa, me gustaría encargar una tarta." aria-label="Encargar una tarta por WhatsApp">Encargar una tarta</a>
 <footer class="footer">
+  <div class="footer__pattern" aria-hidden="true"></div>
   <div class="wrap">
-    <div class="footer__top">
-      <div class="footer__brand">
-        <div class="footer__logos"><span class="logo-word" role="img" aria-label="mimosa"></span><span class="logo-icon logo-icon--lg" aria-hidden="true"></span></div>
-        <p>Repostería rústica hecha con mucho mimo en la Plaza de los Cocoteros, San Agustín.</p>
-      </div>
+    <div class="footer__hero">
+      <span class="footer__logo" role="img" aria-label="mimosa"></span>
+      <p class="footer__tag">Rustic Bakehouse</p>
+      <p class="footer__hand">Hecho con mucho mimo</p>
+    </div>
+    <div class="footer__cols">
       <div>
         <h4>Visítanos</h4>
         <ul>
           <li>Plaza de los Cocoteros</li>
           <li>San Agustín, Gran Canaria</li>
           <li><a href="visitanos.html">Cómo llegar →</a></li>
+          <li><a href="preguntas.html">Preguntas frecuentes →</a></li>
         </ul>
       </div>
       <div>
         <h4>Horario</h4>
         <ul>
-          <li>Miércoles – Domingo</li>
+          <li>Miércoles a domingo</li>
           <li>09:00 – 17:00</li>
           <li>Lunes y martes cerrado</li>
         </ul>
@@ -224,14 +277,15 @@
           <li><a href="https://www.instagram.com/mimosarusticbakery/" target="_blank" rel="noopener">Instagram ↗</a></li>
         </ul>
       </div>
+      <span class="footer__iso" aria-hidden="true"></span>
     </div>
     <div class="footer__bottom">
-      <span>© <span data-year>2026</span> Mimosa Rustic Bakery</span>
-      <span>Hecho con mucho mimo</span>
+      <span>© <span data-year>2026</span> Mimosa Rustic Bakehouse</span>
+      <span>Tradición que florece</span>
     </div>
   </div>
 </footer>
 
-<script src="js/site.js?v=20261107140805" defer></script>
+<script src="js/site.js?v=20261114175530" defer></script>
 </body>
 </html>

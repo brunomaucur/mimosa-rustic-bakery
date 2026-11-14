@@ -1,0 +1,1045 @@
+/* ==========================================================
+   MIMOSA · RUSTIC BAKEHOUSE — capa de marca
+   Basada en el Manual de marca (All Good!).
+   Paleta: Almond Cream · Night Bordeaux · Burnt Peach ·
+           Straw Gold · Cool Steel
+   Tipografía: máquina de escribir en cursiva y minúsculas
+   (LTC Remington Typewriter Pro; en web usamos Courier Prime
+   como equivalente libre) + letra manuscrita para toques.
+   ========================================================== */
+:root {
+  --almond: #E9E2D4;
+  --almond-2: #E0D6C3;
+  --almond-3: #F3EEE4;
+  --bordeaux: #572326;
+  --bordeaux-2: #6b3336;
+  --peach: #BE7B65;
+  --gold: #DDC47C;
+  --steel: #8FABBA;
+
+  /* reasignación de los tokens de la web */
+  --bg: var(--almond);
+  --bg-2: var(--almond-2);
+  --paper: var(--almond-3);
+  --ink: var(--bordeaux);
+  --ink-2: #6a3b3c;
+  --muted: #8a6560;
+  --line: rgba(87, 35, 38, .2);
+  --wine: var(--bordeaux);
+  --mustard: var(--gold);
+  --espresso: var(--bordeaux);
+
+  --type: "Courier Prime", "Courier New", monospace;
+  --serif: var(--type);
+  --sans: var(--type);
+}
+
+body { font-family: var(--type); font-size: 16.5px; line-height: 1.75; color: var(--ink); background: var(--almond); }
+::selection { background: var(--gold); color: var(--bordeaux); }
+
+/* ---------- Tipografía según el manual ---------- */
+.display, .h2, .h3, .product h3, .items h3, .values h3, .offer .h2, .cta-final .display,
+.chapter__title, .statement p.big, .que-es .big, .manifiesto__quote {
+  font-family: var(--type);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -.01em;
+  text-transform: lowercase;
+}
+.display em, .h2 em, .h3 em, .chapter__title em, .que-es .big em, .cta-final .display em {
+  font-family: var(--script);
+  font-style: normal;
+  color: var(--peach);
+  text-transform: lowercase;
+  -webkit-text-stroke: .02em currentColor;
+  font-size: 1.12em;
+  letter-spacing: 0;
+}
+.display { font-size: clamp(2.3rem, 4.6vw, 4.2rem); line-height: 1.05; }
+.h2 { font-size: clamp(1.9rem, 3.2vw, 3rem); line-height: 1.08; }
+.h3 { font-size: clamp(1.5rem, 2.2vw, 2rem); }
+.label, .footer h4, .hours li span:first-child + span:not(:only-child) { font-family: var(--type); }
+.label {
+  font-size: 12.5px; font-weight: 400; letter-spacing: .32em;
+  text-transform: uppercase; color: var(--peach);
+}
+.lead { font-style: italic; color: var(--ink-2); font-size: clamp(1.05rem, 1.4vw, 1.2rem); }
+p { color: inherit; }
+.muted, .note, figcaption, .product p, .items p { color: var(--muted); }
+.link { font-family: var(--type); font-style: italic; color: var(--bordeaux); }
+
+/* ---------- Botones en paleta de marca ---------- */
+.btn { background: var(--bordeaux); border-color: var(--bordeaux); color: var(--almond); }
+.btn:hover { background: var(--peach); border-color: var(--peach); color: var(--almond-3); }
+.btn--ghost { background: transparent; color: var(--bordeaux); border-color: var(--bordeaux); }
+.btn--ghost:hover { background: var(--bordeaux); color: var(--almond); }
+.btn--light { background: var(--almond); color: var(--bordeaux); border-color: var(--almond); }
+.btn--line-light { color: var(--almond); border-color: rgba(233, 226, 212, .7); }
+.btn--wa { background: var(--peach); border-color: var(--peach); color: var(--almond-3); }
+.btn--wa:hover { background: var(--bordeaux); border-color: var(--bordeaux); }
+.wa-float, .fuente-mimosa .wa-float { background: var(--bordeaux); border-color: var(--bordeaux); color: var(--almond); }
+.wa-float:hover { background: var(--peach); border-color: var(--peach); }
+.chip { border-color: var(--line); color: var(--bordeaux); background: var(--almond-3); }
+.chip:hover { background: var(--gold); }
+.tag { color: var(--bordeaux); border: 0; background: var(--gold); border-radius: 40% 60% 55% 45% / 60% 45% 55% 40%; padding: 5px 12px; }
+
+/* ---------- Logo oficial en la cabecera ---------- */
+.brand { gap: 14px; align-items: center; }
+.brand__logo {
+  display: block; width: 118px; aspect-ratio: 2024 / 426;
+  background: currentColor;
+  -webkit-mask: url("../img/marca/logotipo.svg") center / contain no-repeat;
+          mask: url("../img/marca/logotipo.svg") center / contain no-repeat;
+  color: var(--bordeaux);
+  transition: color .4s;
+}
+.brand__tag { font-family: var(--type); font-style: italic; text-transform: none; letter-spacing: .04em; font-size: 13px; opacity: .85; }
+.header.on-dark:not(.is-solid) .brand__logo, .menu-open .header .brand__logo { color: var(--almond); }
+.header.is-solid { background: rgba(233, 226, 212, .94); }
+.nav a { color: inherit; }
+.menu-btn { font-family: var(--type); }
+.mobile-menu { background: var(--bordeaux); color: var(--almond); }
+.mobile-menu a.big em { color: var(--gold); }
+
+/* ---------- Ilustraciones de la marca (se colorean con CSS) ---------- */
+.ilus {
+  display: inline-block; flex: none;
+  background: currentColor;
+  -webkit-mask: var(--m) center / contain no-repeat;
+          mask: var(--m) center / contain no-repeat;
+}
+.ilus--flor-1 { --m: url("../img/marca/flor-1.svg"); aspect-ratio: 1; }
+.ilus--flor-2 { --m: url("../img/marca/flor-2.svg"); aspect-ratio: 1; }
+.ilus--flor-3 { --m: url("../img/marca/flor-3.svg"); aspect-ratio: 1; }
+.ilus--ramita { --m: url("../img/marca/ramita.svg"); aspect-ratio: 3 / 4; }
+.ilus--isotipo { --m: url("../img/marca/isotipo.svg"); aspect-ratio: 1; }
+.c-oro { color: var(--gold); } .c-azul { color: var(--steel); } .c-melocoton { color: var(--peach); } .c-burdeos { color: var(--bordeaux); }
+
+.with-deco { position: relative; display: inline-block; padding-right: .2em; }
+.deco-title { position: absolute; width: .95em; right: -.95em; top: -.35em; transform: rotate(14deg); }
+.deco-title.ilus--ramita { width: .8em; }
+
+/* ---------- Cabeceras de página tipo capítulo (vichy dibujado) ---------- */
+.chapter {
+  position: relative; overflow: hidden;
+  min-height: clamp(340px, 54vh, 540px);
+  display: grid; place-items: center; text-align: center;
+  padding: 130px 0 70px;
+  background: var(--almond) center / cover no-repeat;
+  color: var(--bordeaux);
+}
+.chapter--oro { background-image: url("../img/marca/fondo-vichy-oro.jpg"); }
+.chapter--azul { background-image: url("../img/marca/fondo-vichy-azul.jpg"); }
+.chapter--melocoton { background-image: url("../img/marca/fondo-vichy-melocoton.jpg"); }
+.chapter--burdeos { background-image: url("../img/marca/fondo-vichy-burdeos.jpg"); color: var(--almond); }
+.chapter__in { position: relative; z-index: 1; }
+.chapter .crumbs { display: inline-block; margin-bottom: 26px; padding: 4px 14px; border-radius: 999px; background: rgba(233, 226, 212, .85); color: var(--bordeaux); font-size: 12.5px; }
+.chapter--burdeos .crumbs { background: rgba(87, 35, 38, .7); color: var(--almond); }
+.chapter__kicker {
+  font-family: var(--type); font-weight: 400; text-transform: uppercase;
+  letter-spacing: .3em; font-size: clamp(1.6rem, 3.6vw, 3rem); line-height: 1.1; margin: 0 0 12px;
+}
+.chapter__title { font-size: clamp(1.3rem, 2.2vw, 1.9rem); line-height: 1.3; margin: 0; }
+.chapter__title em { color: inherit; }
+.chapter--burdeos .chapter__title em { color: var(--gold); }
+
+/* Entradilla bajo el capítulo */
+.page-intro { padding: clamp(40px, 6vw, 70px) 0 clamp(30px, 4vw, 50px); text-align: center; }
+.page-intro .page-head__grid { display: block; max-width: 640px; margin: 0 auto; }
+.page-intro .lead { margin: 0 auto; max-width: 52ch; }
+.page-intro .chips { justify-content: center; }
+.page-intro .btn { margin-top: 6px; }
+
+/* ---------- Portada ---------- */
+.hero__title { text-transform: none; }
+.hero h1.display { font-size: clamp(2.6rem, 5vw, 4.8rem); font-style: italic; }
+.hero h1 em { color: var(--gold); font-size: 1.18em; }
+.hero .label { color: rgba(233, 226, 212, .9); }
+
+/* Cinta con el patrón del logo, avanzando lento */
+.ribbon {
+  height: clamp(110px, 12vw, 150px);
+  background: var(--almond) url("../img/marca/pattern-logo-repetido.svg") 0 50% / auto 200% repeat-x;
+  border-bottom: 1px solid var(--line);
+  animation: ribbon 60s linear infinite;
+}
+@keyframes ribbon { to { background-position: -1200px 50%; } }
+
+/* ¿Qué es Mimosa? — bloque Straw Gold con flores Cool Steel */
+.que-es { padding-top: clamp(50px, 7vw, 90px); }
+.que-es__grid { display: grid; grid-template-columns: 1.6fr 1fr; align-items: center; gap: 0; }
+.que-es__panel { background: var(--gold); padding: clamp(32px, 5vw, 64px); color: var(--bordeaux); position: relative; z-index: 1; }
+.que-es__panel .label { color: var(--bordeaux); }
+.que-es .big { font-size: clamp(1.4rem, 2.4vw, 2.1rem); line-height: 1.3; margin: 14px 0 22px; }
+.que-es .big em { color: var(--bordeaux); font-size: 1.15em; }
+.que-es__panel p:not(.big):not(.label) { max-width: 56ch; }
+.que-es__flores { position: relative; height: 100%; min-height: 340px; }
+.que-es__flores .ilus { position: absolute; }
+.que-es__flores .f1 { width: 62%; left: -14%; top: 4%; transform: rotate(-12deg); }
+.que-es__flores .f2 { width: 46%; right: 4%; bottom: 0; transform: rotate(18deg); }
+.que-es__flores .f3 { width: 26%; right: 18%; top: 0; }
+
+/* Bloques de color de marca */
+.bloque--azul { background: var(--steel); color: var(--bordeaux); }
+.bloque--azul .label { color: var(--bordeaux); }
+.bloque--azul .h2 em { color: var(--almond-3); }
+.bloque--azul .field label { color: var(--bordeaux); opacity: .8; }
+.bloque--azul .field input, .bloque--azul .field select, .bloque--azul .field textarea { border-color: rgba(87, 35, 38, .45); color: var(--bordeaux); }
+.bloque--azul .field input::placeholder, .bloque--azul .field textarea::placeholder { color: rgba(87, 35, 38, .55); }
+.bloque--azul .order__note, .bloque--azul p { color: var(--bordeaux); }
+.bloque--oro { background: var(--gold); }
+.bloque--melocoton { background: var(--peach); color: var(--almond-3); }
+
+/* Fotos con marco de pattern desplazado */
+.framed { position: relative; isolation: isolate; }
+.framed::before {
+  content: ""; position: absolute; z-index: -1; inset: 18px -18px -18px 18px;
+  background: var(--almond) center / 220px auto repeat;
+}
+.framed--rayas-melocoton::before { background-image: url("../img/marca/pattern-rayas-melocoton.svg"); }
+.framed--vichy-oro::before { background-image: url("../img/marca/pattern-vichy-oro.svg"); }
+.framed--rayas-azul::before { background-image: url("../img/marca/pattern-rayas-azul.svg"); }
+.framed .ph { border-radius: 0; }
+
+/* Visítanos en portada: mantel dibujado de la marca */
+.mantel--marca { background: url("../img/marca/fondo-vichy-oro.jpg") center / cover; }
+.mantel--marca::before { display: none; }
+.card { background: var(--almond-3); border-radius: 0; box-shadow: 10px 10px 0 var(--bordeaux); }
+
+/* Bandas de foto: sombra cálida en burdeos */
+.band::after { background: linear-gradient(to top, rgba(60, 20, 22, .78), rgba(60, 20, 22, .08) 60%); }
+
+/* Productos: tarjetas */
+.product .ph { border-radius: 0; }
+.product h3 { color: var(--bordeaux); font-size: 1.45rem; }
+.ph { border-radius: 0; }
+.strip.loop img, .masonry img, .zoom { border-radius: 0; }
+
+/* ---------- Nosotros ---------- */
+.julia .split { align-items: start; }
+.julia__photo { max-width: 420px; margin-top: 34px; }
+.manifiesto { position: relative; background: var(--almond); padding: clamp(60px, 9vw, 120px) 0; overflow: hidden; }
+.manifiesto__rayas { position: absolute; left: 0; top: 0; bottom: 0; width: clamp(60px, 14vw, 200px); background: url("../img/marca/pattern-rayas-melocoton.svg") center / 260px auto repeat; }
+.manifiesto__grid { position: relative; display: grid; grid-template-columns: .8fr 2fr; gap: clamp(24px, 4vw, 56px); align-items: start; padding-left: clamp(40px, 12vw, 180px); }
+.manifiesto__hand { font-family: var(--script); font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: 1.1; color: var(--bordeaux); -webkit-text-stroke: .5px currentColor; margin: 14px 0 0; }
+.manifiesto__ramita { width: 110px; margin-top: 24px; }
+.manifiesto__panel { background: var(--steel); padding: clamp(28px, 4.5vw, 56px); color: var(--bordeaux); }
+.manifiesto__quote { font-size: clamp(1.35rem, 2.3vw, 2rem); line-height: 1.3; margin: 0 0 26px; }
+.manifiesto__text { columns: 2 260px; column-gap: 34px; font-size: 15.5px; }
+.manifiesto__text p { break-inside: avoid; }
+.manifiesto__end { font-style: italic; }
+
+.values--marca { gap: clamp(14px, 2vw, 24px); }
+.value { padding: clamp(26px, 3vw, 38px); position: relative; overflow: hidden; }
+.value h3 { margin-top: 70px; }
+.value p { color: inherit; opacity: .9; }
+.value__ilus { position: absolute; top: 20px; left: 22px; width: 64px; }
+.value--oro { background: var(--gold); color: var(--bordeaux); }
+.value--oro .value__ilus { color: var(--bordeaux); }
+.value--melocoton { background: var(--peach); color: var(--almond-3); }
+.value--melocoton h3 { color: var(--almond-3); }
+.value--melocoton .value__ilus { color: var(--gold); }
+.value--azul { background: var(--steel); color: var(--bordeaux); }
+.value--azul .value__ilus { color: var(--almond-3); }
+
+/* ---------- Carta ---------- */
+.menu-nav { background: var(--almond); }
+.menu-cat { border-color: var(--line); }
+.items li { border-color: var(--line); }
+.items h3 { font-size: 1.4rem; }
+
+/* ---------- Eventos ---------- */
+.offer { border-color: var(--line); }
+.cta-final--marca { background: var(--bordeaux) url("../img/marca/pattern-flores-burdeos.svg") center / 260px auto; position: relative; }
+.cta-final--marca::before { content: ""; position: absolute; inset: 0; background: rgba(87, 35, 38, .9); }
+.cta-final--marca .wrap { position: relative; }
+.cta-final--marca .display em { color: var(--gold); }
+
+/* ---------- Visítanos ---------- */
+.contact-list a { border-color: var(--line); }
+.hours li { border-color: var(--line); }
+
+/* ---------- Pie de página ---------- */
+.footer { background: var(--bordeaux); color: var(--almond); padding: 0 0 26px; position: relative; overflow: hidden; }
+.footer__pattern { height: 54px; background: url("../img/marca/pattern-vichy-oro.svg") center / 180px auto repeat-x; }
+.footer__hero { text-align: center; padding: clamp(50px, 7vw, 90px) 0 clamp(30px, 4vw, 50px); }
+.footer__logo {
+  display: block; margin: 0 auto; width: clamp(220px, 34vw, 460px); aspect-ratio: 2024 / 426;
+  background: var(--almond);
+  -webkit-mask: url("../img/marca/logotipo.svg") center / contain no-repeat;
+          mask: url("../img/marca/logotipo.svg") center / contain no-repeat;
+}
+.footer__tag { font-style: italic; letter-spacing: .14em; margin: 14px 0 0; opacity: .9; }
+.footer__hand { font-family: var(--script); font-size: clamp(1.4rem, 2.4vw, 2rem); color: var(--gold); margin: 6px 0 0; -webkit-text-stroke: .4px currentColor; text-transform: lowercase; }
+.footer__cols { position: relative; display: grid; grid-template-columns: repeat(3, 1fr) auto; gap: 30px; padding: 36px 0 40px; border-top: 1px solid rgba(233, 226, 212, .18); border-bottom: 1px solid rgba(233, 226, 212, .18); }
+.footer h4 { color: var(--gold); letter-spacing: .3em; font-weight: 400; font-size: 12px; text-transform: uppercase; margin: 0 0 14px; }
+.footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 15px; }
+.footer a { color: var(--almond); }
+.footer a:hover { color: var(--gold); }
+.footer__iso {
+  width: 92px; aspect-ratio: 1; align-self: center; background: var(--steel);
+  -webkit-mask: url("../img/marca/isotipo.svg") center / contain no-repeat;
+          mask: url("../img/marca/isotipo.svg") center / contain no-repeat;
+}
+.footer__bottom { color: rgba(233, 226, 212, .6); font-size: 13px; padding-top: 20px; display: flex; justify-content: space-between; gap: 16px; }
+
+/* ---------- Desplegable de la carta y otros detalles ---------- */
+.cat-dock__btn, .cat-dock__list { background: var(--almond-3); }
+.cat-dock__list a.is-active, .cat-dock__list a:hover { background: var(--gold); color: var(--bordeaux); }
+.lightbox { background: rgba(60, 20, 22, .95); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1020px) {
+  .que-es__grid { grid-template-columns: 1fr; }
+  .que-es__flores { min-height: 220px; order: -1; }
+  .manifiesto__grid { grid-template-columns: 1fr; }
+  .footer__cols { grid-template-columns: 1fr 1fr; }
+  .footer__iso { display: none; }
+}
+@media (max-width: 700px) {
+  .brand__logo { width: 96px; }
+  .brand__tag { display: none; }
+  .chapter { min-height: 300px; padding: 110px 0 50px; }
+  .que-es__flores .f1 { width: 44%; left: 4%; }
+  .que-es__flores .f2 { width: 34%; }
+  .manifiesto__rayas { width: 26px; }
+  .manifiesto__grid { padding-left: 34px; }
+  .manifiesto__text { columns: 1; }
+  .framed::before { inset: 12px -10px -12px 10px; }
+  .deco-title { width: .8em; right: -.8em; }
+  .footer__cols { grid-template-columns: 1fr; }
+  .footer__bottom { flex-direction: column; }
+  .ribbon { height: 96px; }
+}
+@media (prefers-reduced-motion: reduce) { .ribbon { animation: none; } }
+
+/* ---------- Ajustes tras la revisión ---------- */
+.btn--line-light { background: transparent; }
+.btn--line-light:hover { background: var(--almond); color: var(--bordeaux); border-color: var(--almond); }
+.footer__pattern { display: none; }
+.wa-float, .fuente-mimosa .wa-float { border-color: rgba(233, 226, 212, .55); }
+.framed::before { inset: 26px -26px -26px 26px; background-size: cover; }
+.manifiesto__rayas { background-size: cover; background-position: left center; }
+.deco-title { width: 1.15em; right: -1.15em; top: -.45em; }
+.chapter--burdeos::before { content: ""; position: absolute; inset: 0; background: rgba(70, 25, 28, .38); }
+.chapter--burdeos .chapter__title { text-shadow: 0 1px 12px rgba(40, 10, 12, .5); }
+@media (max-width: 700px) { .framed::before { inset: 14px -12px -14px 12px; } }
+
+/* ==========================================================
+   Tipografías más fieles al manual (alternativas libres):
+   - LTC Remington Typewriter Italic  -> IBM Plex Mono Light Italic
+   - LTC Remington Typewriter Regular -> Cutive Mono (leyendas)
+   - Adobe Handwriting Ernie          -> Homemade Apple (destacados)
+   ========================================================== */
+:root {
+  --type: "IBM Plex Mono", "Courier New", monospace;
+  --typewriter: "Cutive Mono", "IBM Plex Mono", monospace;
+  --hand: "Homemade Apple", var(--script), cursive;
+}
+body { font-family: var(--type); font-weight: 400; font-size: 15.5px; letter-spacing: .01em; }
+.display, .h2, .h3, .product h3, .items h3, .values h3, .offer .h2, .cta-final .display,
+.chapter__title, .que-es .big, .manifiesto__quote, .lead, .link, .brand__tag, .footer__tag {
+  font-family: var(--type); font-style: italic; font-weight: 300;
+}
+.lead, .que-es .big, .manifiesto__quote { font-weight: 300; }
+/* Leyendas y títulos en mayúsculas: máquina de escribir "Regular" */
+.label, .chapter__kicker, .footer h4, .crumbs, .tag, .order__note, .field label {
+  font-family: var(--typewriter); font-style: normal; font-weight: 400;
+}
+.label { font-size: 14px; letter-spacing: .28em; }
+.chapter__kicker { letter-spacing: .26em; }
+/* Destacados manuscritos (como Adobe Handwriting en el manual) */
+.display em, .h2 em, .h3 em, .chapter__title em, .que-es .big em, .cta-final .display em,
+.manifiesto__hand, .footer__hand {
+  font-family: var(--hand); font-weight: 400; -webkit-text-stroke: 0;
+  font-size: .9em; letter-spacing: 0; line-height: 1.5;
+}
+.hero h1 em { font-size: .92em; }
+.manifiesto__hand { font-size: clamp(1.4rem, 2.4vw, 2rem); line-height: 1.6; }
+.footer__hand { font-size: clamp(1.1rem, 1.9vw, 1.6rem); }
+.hero h1.display { font-weight: 300; }
+
+/* ==========================================================
+   TIPOGRAFÍAS DEFINITIVAS (libres, licencia SIL OFL 1.1)
+   - LTC Remington Typewriter Italic  -> Compagnon Italic
+     (Velvetyne; su cursiva se inspiró en bocetos de Goudy
+      para máquinas Remington)
+   - LTC Remington Typewriter Regular -> Compagnon Light
+   - Adobe Handwriting Ernie          -> Mr De Haviland
+   Compagnon se aloja en /fonts junto a su licencia (OFL-Compagnon.txt).
+   ========================================================== */
+@font-face { font-family: "Compagnon"; src: url("../fonts/compagnon-italic.woff2") format("woff2"); font-style: italic; font-weight: 400; font-display: swap; }
+@font-face { font-family: "Compagnon"; src: url("../fonts/compagnon-roman.woff2") format("woff2"); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: "Compagnon"; src: url("../fonts/compagnon-light.woff2") format("woff2"); font-style: normal; font-weight: 300; font-display: swap; }
+:root {
+  --type: "Compagnon", "Courier New", monospace;
+  --typewriter: "Compagnon", "Courier New", monospace;
+  --hand: "Mr De Haviland", var(--script), cursive;
+}
+/* Párrafos en cursiva, como indica el manual */
+body { font-family: var(--type); font-style: italic; font-weight: 400; font-size: 16px; letter-spacing: 0; line-height: 1.75; }
+.display, .h2, .h3, .product h3, .items h3, .values h3, .offer .h2, .cta-final .display,
+.chapter__title, .que-es .big, .manifiesto__quote, .lead, .link, .brand__tag, .footer__tag, .hero h1.display {
+  font-family: var(--type); font-style: italic; font-weight: 400;
+}
+/* Leyendas y mayúsculas: Regular (Compagnon Light) */
+.label, .chapter__kicker, .footer h4, .crumbs, .tag, .order__note, .field label,
+.hours, .contact-list, address, figcaption {
+  font-family: var(--typewriter); font-style: normal; font-weight: 300;
+}
+.label { font-size: 13.5px; letter-spacing: .26em; font-weight: 300; }
+.chapter__kicker { font-weight: 300; letter-spacing: .24em; }
+/* Destacados manuscritos */
+.display em, .h2 em, .h3 em, .chapter__title em, .que-es .big em, .cta-final .display em,
+.manifiesto__hand, .footer__hand {
+  font-family: var(--hand); font-style: normal; font-weight: 400;
+  font-size: 1.35em; line-height: 1.1; letter-spacing: 0;
+}
+.hero h1 em { font-size: 1.4em; }
+.manifiesto__hand { font-size: clamp(2.4rem, 4vw, 3.4rem); line-height: 1.05; }
+.footer__hand { font-size: clamp(1.8rem, 3vw, 2.6rem); }
+/* El menú, los botones y la letra de Mimosa no cambian */
+.nav a, .btn, .chip, .wa-float, .menu-nav a, .cat-dock__btn, .cat-dock__list a, .mobile-menu a.big { font-style: normal; }
+/* La manuscrita (Mr De Haviland) tiene la x pequeña: la agrandamos para igualar el peso visual */
+.display em, .h2 em, .h3 em, .chapter__title em, .que-es .big em, .cta-final .display em { font-size: 1.6em; line-height: .9; }
+.hero h1 em { font-size: 1.55em; }
+
+/* Cinta de logotipos completos (sin cortes), avanzando en bucle */
+.ribbon {
+  background: var(--almond); animation: none;
+  display: flex; align-items: center; overflow: hidden;
+  height: clamp(96px, 10vw, 130px);
+  border-bottom: 1px solid var(--line);
+}
+.ribbon__track { display: flex; align-items: center; gap: clamp(36px, 5vw, 70px); width: max-content; padding-left: 30px; animation: ribbon-move 45s linear infinite; }
+.ribbon__logo {
+  display: block; flex: none;
+  width: clamp(110px, 11vw, 160px); aspect-ratio: 2024 / 426;
+  background: currentColor;
+  -webkit-mask: url("../img/marca/logotipo.svg") center / contain no-repeat;
+          mask: url("../img/marca/logotipo.svg") center / contain no-repeat;
+  transform: rotate(-14deg);
+}
+.ribbon__logo:nth-child(even) { transform: rotate(-14deg) translateY(10px); }
+.ribbon__logo:nth-child(odd) { transform: rotate(-14deg) translateY(-10px); }
+@keyframes ribbon-move { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .ribbon__track { animation: none; } }
+
+/* Cinta con el aspecto del pattern (logos en diagonal y en zigzag), sin cortes */
+.ribbon { height: 200px; }
+.ribbon__track { gap: 14px; padding-left: 20px; animation-duration: 70s; }
+.ribbon__logo { width: 130px; }
+.ribbon__logo:nth-child(odd)  { transform: translateY(-45px) rotate(35deg); }
+.ribbon__logo:nth-child(even) { transform: translateY(45px) rotate(35deg); }
+@media (max-width: 700px) {
+  .ribbon { height: 160px; }
+  .ribbon__logo { width: 100px; }
+  .ribbon__track { gap: 10px; }
+  .ribbon__logo:nth-child(odd)  { transform: translateY(-36px) rotate(35deg); }
+  .ribbon__logo:nth-child(even) { transform: translateY(36px) rotate(35deg); }
+}
+/* Cinta: logos más pequeños, como el pattern original */
+.ribbon { height: 140px; }
+.ribbon__track { gap: 8px; animation-duration: 60s; }
+.ribbon__logo { width: 88px; }
+.ribbon__logo:nth-child(odd)  { transform: translateY(-31px) rotate(35deg); }
+.ribbon__logo:nth-child(even) { transform: translateY(31px) rotate(35deg); }
+@media (max-width: 700px) {
+  .ribbon { height: 118px; }
+  .ribbon__logo { width: 72px; }
+  .ribbon__track { gap: 6px; }
+  .ribbon__logo:nth-child(odd)  { transform: translateY(-26px) rotate(35deg); }
+  .ribbon__logo:nth-child(even) { transform: translateY(26px) rotate(35deg); }
+}
+.mantel--marca .visit-card .label { margin-bottom: 22px; }
+
+/* ===== Portada de marca (sustituye al vídeo) ===== */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hero--marca {
+  height: 100svh; min-height: 600px;
+  background: var(--almond) url("../img/marca/fondo-vichy-oro.jpg") center / cover;
+  color: var(--bordeaux);
+  display: grid; place-items: center; text-align: center;
+}
+.hero--marca::before { /* velo suave para que el logo respire sobre el vichy */
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 46% 40% at 50% 52%, rgba(233, 226, 212, .92) 0%, rgba(233, 226, 212, .7) 55%, rgba(233, 226, 212, 0) 100%);
+}
+.hero-marca__in { position: relative; z-index: 2; padding: 90px var(--pad) 40px; display: grid; justify-items: center; }
+.hero--marca .label { color: var(--bordeaux); opacity: .8; margin-bottom: 22px; }
+.hero-marca__logo {
+  width: clamp(260px, 44vw, 620px); aspect-ratio: 2024 / 426; margin: 0;
+  background: var(--bordeaux);
+  -webkit-mask: url("../img/marca/logotipo.svg") center / contain no-repeat;
+          mask: url("../img/marca/logotipo.svg") center / contain no-repeat;
+}
+.hero-marca__sub {
+  font-family: var(--type), serif; font-weight: 300; font-style: normal;
+  text-transform: uppercase; letter-spacing: .32em; font-size: clamp(12px, 1.1vw, 15px);
+  margin: 20px 0 0;
+}
+.hero-marca__hand {
+  font-family: var(--hand), cursive; color: var(--peach);
+  font-size: clamp(2.6rem, 5vw, 4.4rem); line-height: 1; margin: 8px 0 30px;
+}
+.hero--marca .hero__ctas { justify-content: center; }
+.hero--marca .scroll-cue { background: rgba(87, 35, 38, .25); }
+.hero--marca .scroll-cue::after { background: var(--bordeaux); }
+
+.hm-deco { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.hm { position: absolute; opacity: 0; transform: scale(.6) rotate(-20deg); transition: opacity 1.4s var(--ease), transform 1.6s var(--ease); }
+.hero.is-ready .hm { opacity: 1; transform: none; }
+.hm::after { content: none; }
+.hm1 { width: clamp(90px, 11vw, 170px); left: 7%;  top: 18%; transition-delay: .5s; }
+.hm2 { width: clamp(60px, 7vw, 110px);  left: 17%; bottom: 14%; transition-delay: .7s; }
+.hm3 { width: clamp(70px, 8vw, 130px);  right: 9%; top: 16%; transition-delay: .6s; }
+.hm4 { width: clamp(70px, 8vw, 120px);  right: 15%; bottom: 12%; transition-delay: .85s; }
+.hm5 { width: clamp(46px, 4.5vw, 70px); left: 24%; top: 26%; transition-delay: 1s; }
+.hm6 { width: clamp(44px, 4vw, 64px);   right: 30%; bottom: 8%; transition-delay: 1.1s; }
+.hm7 { width: clamp(56px, 6vw, 90px);   left: 4%; bottom: 34%; transition-delay: .95s; }
+.hero.is-ready .hm1, .hero.is-ready .hm4, .hero.is-ready .hm6 { animation: hm-float 9s ease-in-out 2s infinite alternate; }
+.hero.is-ready .hm2, .hero.is-ready .hm3, .hero.is-ready .hm5, .hero.is-ready .hm7 { animation: hm-float 11s ease-in-out 2.4s infinite alternate-reverse; }
+@keyframes hm-float { from { translate: 0 0; rotate: -4deg; } to { translate: 0 -12px; rotate: 5deg; } }
+@media (prefers-reduced-motion: reduce) { .hero .hm { animation: none !important; transition: none; opacity: 1; transform: none; } }
+@media (max-width: 760px) {
+  .hero--marca::before { background: radial-gradient(ellipse 80% 38% at 50% 50%, rgba(233, 226, 212, .94) 0%, rgba(233, 226, 212, .72) 60%, rgba(233, 226, 212, 0) 100%); }
+  .hero-marca__logo { width: min(82vw, 360px); }
+  .hm1 { left: -4%; top: 13%; } .hm3 { right: -3%; top: 15%; }
+  .hm2 { left: 6%; bottom: 9%; } .hm4 { right: 5%; bottom: 8%; }
+  .hm5 { left: 40%; top: 10%; } .hm6 { right: 42%; bottom: 4%; } .hm7 { display: none; }
+  .hero--marca .scroll-cue { display: none; }
+}
+
+/* ===== Portada: la taza cae y el café escribe «mimosa» ===== */
+@property --p { syntax: "<percentage>"; inherits: true; initial-value: -4%; }
+.vierte {
+  --T: 4.4s; --D: .35s;
+  position: relative; width: clamp(260px, 44vw, 620px); aspect-ratio: 2024 / 426;
+  animation: vierte-p var(--T) cubic-bezier(.45, .05, .55, .95) var(--D) both;
+}
+@keyframes vierte-p { 0%, 28% { --p: -4%; } 86%, 100% { --p: 104%; } }
+.vierte__logo {
+  position: absolute; inset: 0; background: var(--bordeaux);
+  -webkit-mask: url("../img/marca/logotipo.svg") center / contain no-repeat;
+          mask: url("../img/marca/logotipo.svg") center / contain no-repeat;
+  clip-path: polygon(0 -20%, calc(var(--p) + .6%) -20%, calc(var(--p) + 2%) 15%, calc(var(--p) - .8%) 38%, calc(var(--p) + 1.6%) 60%, calc(var(--p) - .4%) 82%, calc(var(--p) + 1%) 120%, 0 120%);
+}
+.vierte__taza {
+  position: absolute; width: 30%; left: calc(var(--p) - 13.5%); top: -87%;
+  transform-origin: 45% 14%; z-index: 3; overflow: visible;
+  animation: vierte-taza var(--T) linear var(--D) both;
+}
+@keyframes vierte-taza {
+  0%   { translate: 0 -75vh; rotate: -30deg; opacity: 1; animation-timing-function: cubic-bezier(.5, 0, .9, .5); }
+  20%  { translate: 0 0; rotate: 12deg; animation-timing-function: ease-out; }
+  24%  { translate: 0 -6%; rotate: 0deg; }
+  30%  { translate: 0 0; rotate: 118deg; }
+  56%  { rotate: 124deg; }
+  84%  { translate: 0 0; rotate: 120deg; opacity: 1; animation-timing-function: cubic-bezier(.4, 0, .8, .6); }
+  100% { translate: 22vw -45vh; rotate: 300deg; opacity: 0; }
+}
+.vierte__chorro {
+  position: absolute; left: var(--p); top: -70%; height: 120%; width: max(3px, .55%);
+  translate: -50% 0; background: var(--bordeaux); border-radius: 0 0 4px 4px; width: max(4px, .8%); z-index: 2;
+  transform-origin: top; animation: vierte-chorro var(--T) linear var(--D) both;
+}
+@keyframes vierte-chorro {
+  0%, 28% { transform: scaleY(0); opacity: 1; }
+  31% { transform: scaleY(1); }
+  83% { transform: scaleY(1); opacity: 1; }
+  87%, 100% { transform: scaleY(0) translateY(60%); opacity: 0; }
+}
+.vierte__mancha { /* el charquito donde cae primero */
+  position: absolute; left: -5%; top: 18%; width: 11%; aspect-ratio: 1; background: var(--bordeaux); opacity: 0;
+  -webkit-mask: url("../img/marca/mancha-1.svg") center / contain no-repeat;
+          mask: url("../img/marca/mancha-1.svg") center / contain no-repeat;
+  animation: vierte-mancha 1.6s var(--ease) calc(var(--D) + var(--T) * .29) both;
+}
+@keyframes vierte-mancha { from { opacity: 0; transform: scale(.2); } 30% { opacity: .9; } to { opacity: 0; transform: scale(1.1); } }
+.vierte__gota {
+  position: absolute; width: max(5px, 1.1%); aspect-ratio: 1; border-radius: 50%; background: var(--bordeaux);
+  opacity: 0; animation: vierte-gota .9s var(--ease) both;
+}
+.g1 { left: 20%; top: 104%; animation-delay: calc(var(--D) + var(--T) * .41); }
+.g2 { left: 45%; top: -14%; animation-delay: calc(var(--D) + var(--T) * .54); }
+.g3 { left: 70%; top: 108%; animation-delay: calc(var(--D) + var(--T) * .68); }
+.g4 { left: 93%; top: -10%; animation-delay: calc(var(--D) + var(--T) * .8); }
+@keyframes vierte-gota { from { opacity: 0; transform: scale(0) translateY(-200%); } 40% { opacity: 1; transform: scale(1.3); } to { opacity: .85; transform: scale(1); } }
+@media (max-width: 760px) {
+  .vierte { width: min(70vw, 340px); }
+  .vierte__taza { width: 24%; left: calc(var(--p) - 10.8%); top: -83%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vierte, .vierte * { animation: none !important; }
+  .vierte { --p: 104%; }
+  .vierte__taza, .vierte__chorro, .vierte__mancha { display: none; }
+  .vierte__gota { opacity: .85; }
+}
+
+/* Taza azul que cae y se queda tumbada; el café sale de ella y escribe el logo */
+.vierte-grupo { --T: 4.4s; --D: .35s; display: flex; align-items: center; gap: 0; }
+.vierte-grupo .vierte { --T: inherit; --D: inherit; }
+.vierte__taza {
+  position: relative; inset: auto; left: auto; top: auto;
+  flex: none; width: clamp(96px, 12vw, 176px); margin-right: -1.2%;
+  translate: 0 8%; z-index: 3;
+  transform-origin: 50% 55%;
+  animation: taza-cae var(--T) linear var(--D) both;
+}
+.vierte__taza svg { display: block; width: 100%; height: auto; overflow: visible; }
+@keyframes taza-cae {
+  0%   { transform: translateY(-80vh) rotate(-25deg); animation-timing-function: cubic-bezier(.55, 0, .9, .45); }
+  18%  { transform: translateY(0) rotate(8deg); animation-timing-function: ease-out; }
+  22%  { transform: translateY(-9%) rotate(-4deg); animation-timing-function: ease-in; }
+  25%  { transform: translateY(0) rotate(0deg); animation-timing-function: cubic-bezier(.5, 0, .3, 1.35); }
+  31%  { transform: translateY(14%) rotate(98deg); }
+  34%  { transform: translateY(12%) rotate(94deg); }
+  100% { transform: translateY(12%) rotate(95deg); }
+}
+.vierte__mancha { left: -3%; top: 46%; width: 7%; animation-name: charco; }
+@keyframes charco { from { opacity: 0; transform: scale(.2); } 40% { opacity: .95; } to { opacity: .95; transform: scale(1); } }
+@media (max-width: 760px) {
+  .vierte-grupo .vierte { width: 62vw; }
+  .vierte__taza { width: 21vw; }
+}
+@media (prefers-reduced-motion: reduce) { .vierte__taza { animation: none !important; transform: translateY(12%) rotate(95deg); } }
+
+/* ===== Portada «bodegón»: taza grande en la esquina, rastro de café que escribe el logo ===== */
+.portada-cafe .vierte { animation: none; width: clamp(260px, 44vw, 620px); --p: 104%; }
+.js .portada-cafe .vierte { --p: -4%; }
+.js .portada-cafe .vierte.is-writing { animation: cafe-escribe 1.9s cubic-bezier(.45, .05, .55, .95) both; }
+@keyframes cafe-escribe { from { --p: -4%; } to { --p: 104%; } }
+.portada-cafe .vierte__gota { animation: none; opacity: 0; }
+.portada-cafe .is-writing .vierte__gota { animation: vierte-gota .9s var(--ease) both; }
+.portada-cafe .is-writing .g1 { animation-delay: .35s; }
+.portada-cafe .is-writing .g2 { animation-delay: .8s; }
+.portada-cafe .is-writing .g3 { animation-delay: 1.25s; }
+.portada-cafe .is-writing .g4 { animation-delay: 1.65s; }
+html:not(.js) .portada-cafe .vierte__gota { opacity: .85; }
+
+.cafe-taza {
+  position: absolute; z-index: 2; pointer-events: none;
+  width: clamp(240px, 30vw, 470px); left: -8vw; top: 9vh;
+  transform: rotate(135deg);
+}
+.cafe-taza svg { display: block; width: 100%; height: auto; overflow: visible; }
+.js .cafe-taza { animation: taza-esquina 1.05s linear .3s both; }
+@keyframes taza-esquina {
+  0%   { transform: translate(14vw, -75vh) rotate(40deg) scale(1.25); animation-timing-function: cubic-bezier(.5, 0, .85, .4); }
+  62%  { transform: translate(0, 0) rotate(150deg) scale(1); animation-timing-function: ease-out; }
+  80%  { transform: translate(.6vw, -1vh) rotate(128deg) scale(1.01); animation-timing-function: ease-in-out; }
+  100% { transform: translate(0, 0) rotate(135deg) scale(1); }
+}
+.cafe-rastro { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; overflow: visible; }
+.cafe-rastro > path { fill: none; stroke: var(--bordeaux); stroke-linecap: round; stroke-linejoin: round; }
+.cafe-charco {
+  position: absolute; z-index: 1; left: 0; top: 0; width: 10px; aspect-ratio: 1; opacity: 0;
+  background: var(--bordeaux); translate: -50% -50%;
+  -webkit-mask: url("../img/marca/mancha-2.svg") center / contain no-repeat;
+          mask: url("../img/marca/mancha-2.svg") center / contain no-repeat;
+}
+.portada-cafe .hero-marca__in { padding-top: 120px; }
+@media (max-width: 760px) {
+  .portada-cafe .vierte { width: min(74vw, 360px); }
+  .cafe-taza { width: 62vw; left: -20vw; top: 11vh; }
+  .portada-cafe .hero-marca__in { padding-top: 26vh; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .cafe-taza { animation: none; }
+  .js .portada-cafe .vierte { --p: 104%; }
+  .portada-cafe .vierte__gota { opacity: .85; }
+}
+/* Taza algo más pequeña, sin charco: el hilo de café entra directo en la «m» */
+.cafe-charco { display: none; }
+.cafe-taza { width: clamp(190px, 23vw, 360px); left: -5vw; top: 11vh; }
+@media (max-width: 760px) { .cafe-taza { width: 48vw; left: -12vw; top: 12vh; } }
+/* Botones de la portada: aparecen cuando el café termina de escribir */
+.cafe-ctas { justify-content: center; margin-top: clamp(28px, 5vh, 48px); position: relative; z-index: 2; }
+.js .cafe-ctas > * { opacity: 0; transform: translateY(14px); pointer-events: none; transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.js .portada-cafe.is-escrito .cafe-ctas > * { opacity: 1; transform: none; pointer-events: auto; }
+.js .portada-cafe.is-escrito .cafe-ctas > :nth-child(2) { transition-delay: .12s; }
+@media (max-width: 760px) { .cafe-ctas { flex-direction: column; align-items: center; } }
+
+/* Menú: el mismo del móvil también en escritorio (botón «Menú» y panel a pantalla completa) */
+.nav, .header .btn { display: none !important; }
+.menu-btn {
+  display: inline-flex; align-items: center; gap: 10px; margin-left: auto;
+  background: none; border: 0; cursor: pointer; font-size: 14px; position: relative; z-index: 70; color: inherit;
+}
+.menu-btn i { display: grid; gap: 5px; }
+.menu-btn i::before, .menu-btn i::after { content: ""; width: 22px; height: 1.5px; background: currentColor; transition: transform .4s var(--ease); }
+.menu-open .menu-btn i::before { transform: translateY(3.25px) rotate(45deg); }
+.menu-open .menu-btn i::after { transform: translateY(-3.25px) rotate(-45deg); }
+.menu-open .header { color: var(--almond) !important; background: transparent !important; border-color: transparent !important; backdrop-filter: none !important; }
+@media (min-width: 1021px) {
+  .menu-btn { font-size: 16px; gap: 12px; }
+  .menu-btn i::before, .menu-btn i::after { width: 28px; }
+  .mobile-menu { padding: 120px max(var(--pad), 8vw) 56px; }
+  .mobile-menu a.big { font-size: clamp(3.4rem, 6.2vw, 6rem); }
+}
+/* Panel del menú: apartados centrados */
+.mobile-menu { justify-content: center; align-items: center; text-align: center; }
+.mobile-menu nav { display: grid; justify-items: center; gap: .1em; }
+.mobile-menu .meta { justify-content: center; gap: 28px; flex-wrap: wrap; }
+
+/* ===== Elementos de marca que brotan con el café ===== */
+.vierte .deco { position: absolute; z-index: 1; left: var(--x); top: var(--y); width: var(--w); translate: -50% -50%; rotate: var(--r, 0deg); }
+.deco--ovalo {
+  left: 50% !important; top: 50% !important; width: 118% !important; aspect-ratio: 227.39 / 115.1; z-index: 0 !important;
+  background: currentColor; opacity: .38;
+  -webkit-mask: url("../img/marca/ovalo.svg") center / contain no-repeat;
+          mask: url("../img/marca/ovalo.svg") center / contain no-repeat;
+}
+.vierte__logo { z-index: 1; }
+.js .vierte .deco { opacity: 0; transform: scale(0); }
+.js .vierte.is-writing .deco:not(.deco--ovalo) {
+  animation: brota .95s cubic-bezier(.2, 1.5, .4, 1) var(--t, 0ms) forwards,
+             mece 5.5s ease-in-out calc(var(--t, 0ms) + 950ms) infinite alternate;
+}
+.js .vierte.is-writing .deco--ovalo { animation: ovalo-in 1.1s var(--ease) var(--t, 0ms) forwards; }
+@keyframes brota { from { opacity: 0; transform: scale(0) rotate(-70deg); } 60% { opacity: 1; } to { opacity: 1; transform: scale(1) rotate(0deg); } }
+@keyframes mece { from { translate: -50% -50%; } to { translate: -50% calc(-50% - 6px); rotate: calc(var(--r, 0deg) + 7deg); } }
+@keyframes ovalo-in { from { opacity: 0; transform: scale(.7); } to { opacity: .38; transform: scale(1); } }
+
+/* Al terminar: ramillete en la esquina libre, líneas de pincel, mancha y etiqueta con el horario */
+.cafe-deco { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.cafe-deco > * { position: absolute; }
+.cafe-deco .ilus--flor-1 { width: clamp(90px, 10vw, 160px); right: 5vw; bottom: 9vh; rotate: 14deg; }
+.cafe-deco .ilus--ramita { width: clamp(60px, 6vw, 96px); right: 13vw; bottom: 4vh; rotate: -22deg; }
+.cafe-deco .ilus--flor-2 { width: clamp(56px, 5.5vw, 90px); right: 2.5vw; bottom: 27vh; rotate: -8deg; }
+.deco-lineas {
+  right: 3vw; top: 16vh; width: clamp(36px, 3.6vw, 56px); aspect-ratio: 82.19 / 166.82; background: currentColor;
+  -webkit-mask: url("../img/marca/lineas-finas.svg") center / contain no-repeat;
+          mask: url("../img/marca/lineas-finas.svg") center / contain no-repeat;
+}
+.deco-mancha {
+  left: 26vw; top: 22vh; width: clamp(16px, 1.6vw, 26px); aspect-ratio: 64.81 / 57.41; background: currentColor;
+  -webkit-mask: url("../img/marca/mancha-1.svg") center / contain no-repeat;
+          mask: url("../img/marca/mancha-1.svg") center / contain no-repeat;
+}
+.cafe-etiqueta {
+  position: absolute; z-index: 2; left: 4vw; bottom: 6vh; margin: 0;
+  width: clamp(190px, 17vw, 250px); aspect-ratio: 239.86 / 137.59;
+  display: grid; place-items: center; text-align: center; color: var(--almond);
+  font-family: var(--type), serif; font-style: italic; font-size: clamp(13px, 1.05vw, 15px); line-height: 1.35;
+  rotate: -5deg;
+}
+.cafe-etiqueta::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; background: var(--steel);
+  -webkit-mask: url("../img/marca/etiqueta-1.svg") center / contain no-repeat;
+          mask: url("../img/marca/etiqueta-1.svg") center / contain no-repeat;
+}
+.cafe-etiqueta span { padding: 0 14%; }
+.js .deco-fin { opacity: 0; transform: scale(.4) rotate(-25deg); transition: opacity .8s var(--ease) var(--d, 0s), transform 1s cubic-bezier(.2, 1.4, .4, 1) var(--d, 0s); }
+.js .portada-cafe.is-escrito .deco-fin { opacity: 1; transform: none; }
+.js .deco-lineas { transform: none; clip-path: inset(0 0 100% 0); transition: clip-path 1.2s var(--ease), opacity .3s; }
+.js .portada-cafe.is-escrito .deco-lineas { clip-path: inset(0 0 0 0); }
+@media (max-width: 760px) {
+  .cafe-deco .ilus--flor-1 { width: 26vw; right: -4vw; bottom: 7vh; }
+  .cafe-deco .ilus--ramita { width: 15vw; right: 18vw; bottom: 3vh; }
+  .cafe-deco .ilus--flor-2 { width: 15vw; right: 4vw; bottom: 22vh; }
+  .deco-lineas { right: 5vw; top: 15vh; width: 8vw; }
+  .deco-mancha { left: 60vw; top: 30vh; }
+  .cafe-etiqueta { left: 5vw; bottom: 5vh; width: 46vw; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .vierte .deco:not(.deco--ovalo), .js .deco-fin { animation: none !important; opacity: 1; transform: none; transition: none; }
+  .js .vierte .deco--ovalo { animation: none !important; opacity: .38; transform: none; }
+  .js .deco-lineas { clip-path: none; }
+}
+/* Móvil: el óvalo más contenido para que no toque la taza ni el chorro */
+@media (max-width: 760px) {
+  .deco--ovalo { width: 92% !important; left: 56% !important; top: 58% !important; }
+}
+
+/* Botones con la letra del texto normal (Compagnon cursiva), no con la manuscrita */
+.fuente-mimosa .btn, .btn {
+  font-family: var(--type), serif; font-style: italic; font-weight: 400;
+  text-transform: none; letter-spacing: .01em; -webkit-text-stroke: 0; font-size: 15.5px;
+}
+.fuente-mimosa .btn .arr { font-style: normal; }
+
+/* Eslogan bajo el logo de la portada */
+.cafe-lema {
+  position: relative; z-index: 2; margin: clamp(10px, 2vh, 20px) 0 0;
+  font-family: var(--hand), cursive; font-style: normal; color: var(--peach);
+  font-size: clamp(2.8rem, 4.6vw, 4.4rem); line-height: 1;
+}
+.portada-cafe .cafe-ctas { margin-top: clamp(18px, 3.5vh, 34px); }
+.js .cafe-lema { opacity: 0; transform: translateY(10px); filter: blur(4px); transition: opacity 1s var(--ease), transform 1s var(--ease), filter 1s var(--ease); }
+.js .portada-cafe.is-escrito .cafe-lema { opacity: 1; transform: none; filter: none; }
+.js .portada-cafe.is-escrito .cafe-ctas > * { transition-delay: .35s; }
+.js .portada-cafe.is-escrito .cafe-ctas > :nth-child(2) { transition-delay: .47s; }
+@media (max-width: 760px) { .cafe-lema { font-size: 2.8rem; } }
+
+
+/* ===== La mesa vista desde arriba: sigue el mantel de la portada y van llegando las cosas ===== */
+.mesa { position: relative; overflow: hidden; background: url("../img/marca/fondo-vichy-oro.jpg") center / cover; color: var(--bordeaux); }
+.mesa::before { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(233, 226, 212, .28), rgba(233, 226, 212, .1)); pointer-events: none; }
+.mesa__in { position: relative; max-width: 1240px; margin: 0 auto; height: clamp(660px, 100vh, 900px); }
+.mesa__hola { position: absolute; z-index: 4; left: 0; right: 0; top: 6%; margin: 0; text-align: center; font-family: var(--hand), cursive; font-size: clamp(2.4rem, 4vw, 3.8rem); line-height: 1; color: var(--bordeaux); }
+.mesa__obj, .mesa__servilleta, .mesa__flor { position: absolute; display: block; }
+.mesa__obj { z-index: 3; color: var(--bordeaux); filter: drop-shadow(0 16px 18px rgba(87, 35, 38, .24)); }
+.mesa__nota { position: absolute; left: 50%; bottom: -1.1em; translate: -50% 0; white-space: nowrap; font-family: var(--hand), cursive; font-size: clamp(1.9rem, 2.6vw, 2.5rem); line-height: 1; filter: none; }
+.mesa__nota .arr { font-family: var(--type), serif; font-size: .45em; font-style: normal; vertical-align: middle; transition: translate .3s; }
+.mesa__obj:hover .mesa__nota .arr { translate: 5px 0; }
+
+/* Taza: plato crema, taza azul con asa y el café de verdad dentro */
+.mesa__taza { left: 9%; top: 27%; width: clamp(210px, 20vw, 280px); }
+.mesa__plato { display: block; aspect-ratio: 1; border-radius: 50%; background: #f6f1e7; padding: 13%; box-shadow: inset 0 0 0 2px rgba(87, 35, 38, .08), inset 0 -6px 14px rgba(87, 35, 38, .08); }
+.mesa__cafe { position: relative; display: block; aspect-ratio: 1; border-radius: 50%; background: var(--steel); padding: 7%; }
+.mesa__cafe::after { content: ""; position: absolute; right: -19%; top: 40%; width: 24%; height: 20%; border-radius: 0 999px 999px 0; background: var(--steel); }
+.mesa__cafe img { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.mesa__servilleta { z-index: 2; left: 5.5%; top: 22%; width: clamp(230px, 22vw, 300px); aspect-ratio: 1; border-radius: 6px;
+  background: repeating-linear-gradient(0deg, transparent 0 14px, rgba(190, 123, 101, .55) 14px 17px), repeating-linear-gradient(90deg, #f3ede2 0 14px, #efe3d6 14px 17px);
+  box-shadow: 0 10px 18px rgba(87, 35, 38, .14); }
+
+/* Plato de cookies */
+.mesa__cookies { right: 5%; top: 13%; width: clamp(270px, 31vw, 430px); }
+.mesa__cookies img { display: block; width: 100%; height: auto; }
+.mesa__cookies .mesa__nota { bottom: -.6em; }
+
+/* La carta de papel */
+.mesa__carta { left: 39%; top: 50%; width: clamp(250px, 24vw, 320px); padding: 22px 24px 18px; background: #f7f2e8; border-radius: 4px; color: var(--bordeaux); text-decoration: none; }
+.mesa__carta::before { content: ""; position: absolute; inset: 7px; border: 1px solid rgba(87, 35, 38, .28); border-radius: 2px; pointer-events: none; }
+.mesa__carta-cab { display: block; text-align: center; font-family: var(--type), serif; font-weight: 300; text-transform: uppercase; letter-spacing: .26em; font-size: 11px; margin-bottom: 14px; }
+.mesa__carta-lista { display: grid; gap: 9px; }
+.mesa__carta-lista > span { display: flex; align-items: baseline; gap: 6px; font-family: var(--type), serif; font-style: italic; font-size: 16px; }
+.mesa__carta-lista b { font-weight: 400; }
+.mesa__carta-lista i { flex: 1; border-bottom: 1.5px dotted rgba(87, 35, 38, .45); translate: 0 -4px; }
+.mesa__carta-lista em { font-size: 13.5px; opacity: .75; }
+.mesa__carta-pie { display: block; margin-top: 16px; text-align: center; font-family: var(--type), serif; font-style: italic; font-size: 14px; border-top: 1px dashed rgba(87, 35, 38, .35); padding-top: 10px; }
+.mesa__carta:hover .mesa__carta-pie { color: var(--peach); }
+
+.mesa__flor { z-index: 2; }
+.mesa__flor.m1 { width: clamp(60px, 6vw, 86px); left: 31%; top: 22%; }
+.mesa__flor.m2 { width: clamp(70px, 7vw, 100px); left: 24%; bottom: 7%; }
+.mesa__flor.m3 { width: clamp(56px, 5vw, 78px); right: 12%; bottom: 9%; }
+.mesa__miga { position: absolute; z-index: 2; width: 7px; height: 6px; border-radius: 45%; background: #b98a5a; opacity: .8; }
+.mesa__miga.a { right: 37%; top: 30%; } .mesa__miga.b { right: 35.5%; top: 33%; width: 5px; height: 5px; } .mesa__miga.c { right: 21%; top: 62%; }
+
+/* Las cosas llegan a la mesa desde fuera, girando un poco */
+.js .mesa [data-reveal] { opacity: 0; transform: translate(var(--fx, 0), var(--fy, 30px)) rotate(var(--fr, 0deg)); transition: opacity .6s ease, transform 1.4s cubic-bezier(.2, .85, .25, 1); transition-delay: var(--d, 0s); }
+.js .mesa [data-reveal].is-in, .mesa [data-reveal] { opacity: 1; transform: rotate(var(--r, 0deg)); }
+.js .mesa .mesa__hola[data-reveal] { transform: translateY(20px); }
+.js .mesa .mesa__hola[data-reveal].is-in { transform: none; }
+.js .mesa .mesa__obj.is-in:hover { transform: rotate(var(--r, 0deg)) translateY(-8px); transition-duration: .5s; transition-delay: 0s; }
+
+@media (max-width: 760px) {
+  .mesa__in { height: 215vw; }
+  .mesa__hola { top: 3%; font-size: 2.3rem; padding: 0 18px; }
+  .mesa__cookies { right: -7%; top: 10%; width: 66vw; }
+  .mesa__taza { left: 6%; top: 37%; width: 46vw; }
+  .mesa__servilleta { left: 3%; top: 35%; width: 48vw; }
+  .mesa__carta { left: auto; right: 6%; top: 61%; width: 66vw; padding: 18px 18px 14px; }
+  .mesa__carta-lista > span { font-size: 15px; }
+  .mesa__nota { font-size: 2rem; }
+  .mesa__flor.m1 { left: 64%; top: 45%; width: 14vw; }
+  .mesa__flor.m2 { left: 5%; bottom: 3%; top: auto; width: 18vw; }
+  .mesa__flor.m3 { right: auto; left: 8%; top: 22%; bottom: auto; width: 12vw; }
+  .mesa__miga.a { right: 64%; top: 12%; } .mesa__miga.b { right: 61%; top: 14%; } .mesa__miga.c { right: 40%; top: 56%; }
+}
+@media (prefers-reduced-motion: reduce) { .js .mesa [data-reveal] { transition: none; } }
+/* Ajustes de la mesa en escritorio: aire bajo la cabecera y el plato dentro de la pantalla */
+@media (min-width: 761px) {
+  .mesa__in { height: clamp(700px, 108vh, 960px); }
+  .mesa__hola { top: 10%; }
+  .mesa__servilleta { top: 27%; }
+  .mesa__taza { top: 32%; }
+  .mesa__flor.m1 { top: 27%; }
+  .mesa__cookies { right: 6%; top: 20%; width: clamp(260px, 27vw, 390px); }
+  .mesa__carta { top: 55%; }
+}
+@media (min-width: 761px) { .mesa__flor.m2 { bottom: 11%; } }
+
+/* ===== La vitrina: «lo que sale del horno» detrás del cristal, en dos baldas de madera ===== */
+.vitrina {
+  position: relative; margin-top: clamp(22px, 3vw, 40px); padding: clamp(26px, 3vw, 40px) clamp(14px, 2vw, 28px) 0;
+  background: linear-gradient(180deg, #fbf7ef 0%, #f1e8d9 100%);
+  border: clamp(9px, 1vw, 14px) solid var(--bordeaux); border-radius: 26px 26px 10px 10px;
+  box-shadow: inset 0 18px 40px rgba(87, 35, 38, .1), 0 24px 40px -24px rgba(87, 35, 38, .45);
+  overflow: hidden;
+}
+.vitrina__luz { position: absolute; left: 6%; right: 6%; top: 0; height: 6px; border-radius: 0 0 6px 6px; background: #fff6dc; box-shadow: 0 0 30px 12px rgba(255, 236, 190, .65); }
+.vitrina__cristal {
+  position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  background: linear-gradient(115deg, transparent 0 18%, rgba(255, 255, 255, .34) 18% 21%, transparent 21% 26%, rgba(255, 255, 255, .2) 26% 27.2%, transparent 27.2% 64%, rgba(255, 255, 255, .16) 64% 66%, transparent 66%);
+}
+.vitrina__balda {
+  position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(12px, 1.6vw, 22px);
+  padding: 0 clamp(4px, .6vw, 10px) 0; margin-bottom: clamp(30px, 3.2vw, 44px);
+}
+.vitrina__balda::after { /* la balda de madera */
+  content: ""; position: absolute; left: calc(-1 * clamp(14px, 2vw, 28px)); right: calc(-1 * clamp(14px, 2vw, 28px)); bottom: calc(-1 * clamp(16px, 1.6vw, 22px)); height: clamp(14px, 1.4vw, 18px);
+  background: linear-gradient(180deg, #d7aa77 0%, #c18f5c 55%, #a8774a 100%); box-shadow: 0 8px 14px -6px rgba(87, 35, 38, .35);
+}
+.vitrina__balda:last-of-type { margin-bottom: clamp(16px, 1.6vw, 22px); }
+.vit { position: relative; z-index: 1; display: block; color: var(--bordeaux); text-decoration: none; }
+.vit__foto { display: block; aspect-ratio: 4 / 4.4; overflow: hidden; border-radius: 12px 12px 4px 4px; box-shadow: 0 12px 14px -10px rgba(87, 35, 38, .55);
+  transition: transform .5s cubic-bezier(.2, 1.3, .4, 1), box-shadow .5s; }
+.vit__foto img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
+.vit__eti {
+  position: relative; z-index: 2; display: grid; justify-items: center; text-align: center; gap: 1px;
+  margin: -14px auto 0; width: 88%; padding: 12px 10px 13px; color: var(--bordeaux);
+  rotate: var(--tr, -2deg); transform-origin: 50% 0; transition: rotate .6s cubic-bezier(.2, 1.6, .4, 1);
+}
+.vit__eti::before { content: ""; position: absolute; inset: 0; z-index: -1; background: #fbf6ec; filter: drop-shadow(0 3px 4px rgba(87, 35, 38, .18));
+  -webkit-mask: url("../img/marca/etiqueta-2.svg") center / 100% 100% no-repeat; mask: url("../img/marca/etiqueta-2.svg") center / 100% 100% no-repeat; }
+.vit__eti b { font-family: var(--type), serif; font-style: italic; font-weight: 400; font-size: clamp(14px, 1.15vw, 16px); line-height: 1.15; }
+.vit__eti small { font-family: var(--type), serif; font-style: italic; font-size: 12px; opacity: .7; line-height: 1.25; }
+.vit:hover .vit__foto { transform: translateY(-10px) rotate(-1.2deg); box-shadow: 0 24px 22px -14px rgba(87, 35, 38, .55); }
+.vit:hover .vit__foto img { transform: scale(1.05); }
+.vit:hover .vit__eti { rotate: calc(var(--tr, -2deg) * -1.4); }
+@media (max-width: 900px) {
+  .vitrina { border-radius: 20px 20px 8px 8px; }
+  .vitrina__balda { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 42vw; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 6px; }
+  .vitrina__balda::-webkit-scrollbar { display: none; }
+  .vit { scroll-snap-align: start; }
+  .vitrina__balda::after { position: sticky; display: none; }
+  .vitrina__balda { border-bottom: 14px solid #c18f5c; box-shadow: 0 10px 12px -8px rgba(87, 35, 38, .35); margin-left: calc(-1 * clamp(14px, 2vw, 28px)); margin-right: calc(-1 * clamp(14px, 2vw, 28px)); padding-left: 14px; padding-right: 14px; }
+}
+
+/* Manteles de distintos colores: oro en la portada, melocotón en la mesa y azul al final */
+.mesa { background-image: url("../img/marca/fondo-vichy-melocoton.jpg"); }
+.mesa::before { background: linear-gradient(rgba(233, 226, 212, .36), rgba(233, 226, 212, .22)); }
+.mesa__servilleta {
+  background: repeating-linear-gradient(0deg, transparent 0 14px, rgba(143, 171, 186, .7) 14px 17px), repeating-linear-gradient(90deg, #f6f1e7 0 14px, #eef0ec 14px 17px);
+}
+.mesa__miga { background: #8a5a3c; }
+.mantel--marca { background-image: url("../img/marca/fondo-vichy-azul.jpg"); }
+
+/* ===== Página de preguntas frecuentes ===== */
+.faq__grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); gap: clamp(30px, 6vw, 90px); align-items: start; }
+.faq__cab { position: sticky; top: 110px; }
+.faq__cab .lead { margin: 0; }
+.faq__flor { display: block; width: clamp(70px, 8vw, 110px); margin-top: 34px; rotate: -12deg; }
+.faq__lista { border-top: 1.5px solid rgba(87, 35, 38, .25); }
+.faq__item { border-bottom: 1.5px solid rgba(87, 35, 38, .25); }
+.faq__item summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  padding: 22px 4px; font-family: var(--type), serif; font-style: italic; font-size: clamp(1.1rem, 1.6vw, 1.35rem); line-height: 1.3; color: var(--bordeaux);
+}
+.faq__item summary::-webkit-details-marker { display: none; }
+.faq__item summary i { position: relative; flex: none; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid currentColor; transition: background .3s, color .3s, rotate .4s var(--ease); }
+.faq__item summary i::before, .faq__item summary i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 1.5px; background: currentColor; translate: -50% -50%; }
+.faq__item summary i::after { rotate: 90deg; transition: rotate .4s var(--ease); }
+.faq__item[open] summary i { background: var(--bordeaux); color: var(--almond); }
+.faq__item[open] summary i::after { rotate: 0deg; }
+.faq__item summary:hover span { color: var(--peach); }
+.faq__resp { padding: 0 54px 24px 4px; }
+.faq__resp p { margin: 0; }
+.faq__resp a { color: var(--peach); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 760px) {
+  .faq__grid { grid-template-columns: 1fr; }
+  .faq__cab { position: static; }
+  .faq__flor { display: none; }
+  .faq__resp { padding-right: 4px; }
+}
+
+/* ===== La carta solo con texto, como una carta impresa; las fotos van abajo ===== */
+.carta-texto { display: grid; grid-template-columns: 1fr 1fr; gap: 0 clamp(40px, 7vw, 110px); padding-top: clamp(20px, 3vw, 40px); }
+.carta-texto .menu-cat { display: block; padding: clamp(40px, 5vw, 64px) 0; border-bottom: 0; border-top: 1.5px solid rgba(87, 35, 38, .2); }
+.carta-texto .menu-cat__head { margin-bottom: 18px; }
+.carta-texto .menu-cat__head .h2 { font-size: clamp(1.6rem, 2.4vw, 2.1rem); margin: 0 0 6px; }
+.carta-texto .menu-cat__head .muted { margin: 0; font-size: 15px; }
+.carta-texto .items li { padding: 12px 0; border: 0; gap: 2px 14px; }
+.carta-texto .items li:last-child { border: 0; }
+.carta-texto .items h3 { font-size: 1.12rem; line-height: 1.3; }
+.carta-texto .items p { font-size: 14.5px; line-height: 1.5; }
+.carta-texto .note { font-size: 14px; }
+.ver-fotos { margin-top: 18px; background: none; border: 0; padding: 4px 0; cursor: pointer; color: var(--peach); font-family: var(--type), serif; font-style: italic; font-size: 15px; border-bottom: 1.5px solid currentColor; }
+.ver-fotos:hover { color: var(--bordeaux); }
+.ver-fotos .arr { font-style: normal; display: inline-block; transition: transform .3s; }
+.ver-fotos:hover .arr { transform: translateX(4px); }
+.carta-fotos { padding-top: clamp(40px, 5vw, 70px); border-top: 1.5px solid rgba(87, 35, 38, .2); }
+.carta-fotos .masonry figure { cursor: zoom-in; }
+@media (max-width: 860px) { .carta-texto { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .carta-fotos { padding-top: 96px; } }
+
+/* ===== Carta: una sección por fila, alternando lado y color, con su plato y flores ===== */
+.carta-texto { grid-template-columns: 1fr; padding-top: 0; }
+.carta-texto .menu-cat {
+  --c: var(--gold); --tinte: rgba(221, 196, 124, .16);
+  display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.3fr); gap: clamp(30px, 6vw, 90px); align-items: center;
+  padding: clamp(60px, 8vw, 110px) 0; border: 0; position: relative;
+}
+.carta-texto .menu-cat--melocoton { --c: var(--peach); --tinte: rgba(190, 123, 101, .1); }
+.carta-texto .menu-cat--azul { --c: var(--steel); --tinte: rgba(143, 171, 186, .14); }
+.carta-texto .menu-cat--burdeos { --c: var(--bordeaux); --tinte: rgba(87, 35, 38, .06); }
+.carta-texto .menu-cat:nth-of-type(even) { box-shadow: 0 0 0 100vmax var(--tinte); clip-path: inset(0 -100vmax); background: var(--tinte); }
+.carta-texto .menu-cat:nth-of-type(even) .menu-cat__lado { order: 2; }
+.menu-cat__lado { display: grid; justify-items: center; text-align: center; }
+.menu-cat__plato {
+  width: clamp(190px, 22vw, 290px); aspect-ratio: 1; margin: 0 0 26px; border-radius: 50%; overflow: hidden;
+  border: clamp(8px, .9vw, 12px) solid #f6f1e7; box-shadow: 0 0 0 2px var(--c), 0 18px 30px -12px rgba(87, 35, 38, .35);
+  rotate: -4deg;
+}
+.menu-cat:nth-of-type(even) .menu-cat__plato { rotate: 5deg; }
+.menu-cat__plato img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
+.menu-cat__plato:hover img { transform: scale(1.06) rotate(3deg); }
+.carta-texto .menu-cat__head { margin-bottom: 4px; }
+.carta-texto .menu-cat__head .h2 { font-size: clamp(1.8rem, 2.8vw, 2.4rem); }
+.carta-texto .menu-cat__head .muted { max-width: 30ch; margin: 0 auto; }
+.menu-cat__lado .ver-fotos { margin-top: 14px; }
+.menu-cat__lista .items { display: grid; grid-template-columns: 1fr 1fr; gap: 6px clamp(20px, 3vw, 40px); }
+.menu-cat__lista .items li { position: relative; padding: 16px 0 16px 34px; border-top: 1.5px dashed rgba(87, 35, 38, .18); }
+.menu-cat__lista .items li::before {
+  content: ""; position: absolute; left: 0; top: 19px; width: 20px; aspect-ratio: 1; background: var(--c);
+  -webkit-mask: url("../img/marca/flor-3.svg") center / contain no-repeat; mask: url("../img/marca/flor-3.svg") center / contain no-repeat;
+  transition: rotate .6s var(--ease);
+}
+.menu-cat__lista .items li:hover::before { rotate: 90deg; }
+.menu-cat__lista .items li:nth-child(3n+2)::before { -webkit-mask-image: url("../img/marca/flor-1.svg"); mask-image: url("../img/marca/flor-1.svg"); }
+.menu-cat__lista .items li:nth-child(3n)::before { -webkit-mask-image: url("../img/marca/flor-2.svg"); mask-image: url("../img/marca/flor-2.svg"); }
+.menu-cat__lista .items .tag { grid-column: 1 / -1; justify-self: start; margin: 2px 0 4px; }
+.menu-cat__lista .note { margin-top: 22px !important; padding: 14px 18px; border-radius: 10px; background: var(--tinte); border-left: 3px solid var(--c); }
+@media (max-width: 1000px) { .menu-cat__lista .items { grid-template-columns: 1fr; } }
+@media (max-width: 860px) {
+  .carta-texto .menu-cat { grid-template-columns: 1fr; gap: 26px; }
+  .carta-texto .menu-cat:nth-of-type(even) .menu-cat__lado { order: 0; }
+  .menu-cat__plato { width: 52vw; }
+}
+.carta-texto .menu-cat:nth-of-type(even) { grid-template-columns: minmax(0, 1.3fr) minmax(0, .8fr); }
+@media (max-width: 860px) { .carta-texto .menu-cat:nth-of-type(even) { grid-template-columns: 1fr; } }
+
+/* ===== Letra y estilo de la carta impresa de Mimosa (American Typewriter si el dispositivo la tiene; si no, Cutive) ===== */
+:root { --menu: "American Typewriter", "AmericanTypewriter", "Cutive", "Compagnon", serif; }
+.vitrina__balda { grid-template-columns: repeat(4, 1fr); }
+.carta-texto .menu-cat__head .h2 { font-family: var(--menu); font-style: normal; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--steel); font-size: clamp(2rem, 3.4vw, 2.9rem); }
+.carta-texto .menu-cat__head .h2 em { font-family: inherit; font-size: 1em; color: inherit; }
+.carta-texto .items h3 { font-family: var(--menu); font-style: normal; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--bordeaux); font-size: clamp(1.2rem, 1.6vw, 1.4rem); line-height: 1.2; }
+.carta-texto .items p { font-size: 14.5px; }
+.carta-texto .items .tag { font-family: var(--menu); text-transform: none; letter-spacing: 0; font-size: 13px; background: none; color: var(--peach); border: 1.5px solid currentColor; border-radius: 999px; padding: 2px 10px; }
+
+/* Lista de precios de encargos, como la hoja de Mimosa */
+.precios { background: #f3ede2; color: var(--bordeaux); padding: clamp(26px, 3vw, 40px) clamp(22px, 3vw, 40px) clamp(22px, 2.6vw, 34px); border-radius: 6px; box-shadow: 0 22px 40px -22px rgba(40, 30, 30, .5); margin-bottom: 22px; font-family: var(--menu); }
+.precios__tit { margin: 0 0 4px; text-align: center; font-family: var(--menu); color: var(--steel); font-size: clamp(2.2rem, 3.4vw, 2.9rem); line-height: 1; }
+.precios__cols, .precios__fila { display: grid; grid-template-columns: minmax(0, 1fr) 5.6em 5.6em; gap: 10px; align-items: baseline; }
+.precios__cols { margin: 14px 0 6px; font-size: 1.05rem; text-align: right; }
+.precios__grupo { padding: 10px 0; }
+.precios__grupo + .precios__grupo { border-top: 1px dashed rgba(87, 35, 38, .22); }
+.precios__fila { margin: 0; padding: 4px 0; }
+.precios__nom { font-size: clamp(1.02rem, 1.3vw, 1.18rem); line-height: 1.25; }
+.precios__nom small { display: block; font-size: .78em; opacity: .75; }
+.precios__pre { text-align: right; color: var(--steel); font-weight: 700; font-size: clamp(.98rem, 1.2vw, 1.1rem); white-space: nowrap; }
+.precios__nota { margin: 14px 0 0; text-align: right; color: var(--peach); font-weight: 700; font-size: .95rem; }
+@media (max-width: 760px) {
+  .vitrina__balda { grid-template-columns: none; }
+  .precios__cols, .precios__fila { grid-template-columns: minmax(0, 1fr) 4.6em 4.6em; gap: 6px; }
+}
+.precios, .precios * { font-style: normal; }
+.precios__nom small { font-family: var(--type), serif; font-style: italic; }
+.precios p.precios__tit { color: var(--steel); }
+
+/* Selector de categorías de la carta: siempre arriba a la izquierda y con el burdeos del menú */
+.cat-dock, .cat-dock.is-on, .cat-dock.is-on.is-away {
+  top: 84px; bottom: auto; left: clamp(12px, 2vw, 28px); transition: top .45s var(--ease), opacity .35s, transform .45s var(--ease);
+}
+.cat-dock { transform: translateY(-8px); }
+.cat-dock.is-on, .cat-dock.is-on.is-away { transform: none; opacity: 1; pointer-events: auto; }
+body:has(.header.is-hidden) .cat-dock { top: 14px; }
+.cat-dock__btn { background: var(--bordeaux); color: var(--almond); border: 0; backdrop-filter: none; box-shadow: 0 12px 24px -12px rgba(87, 35, 38, .6); }
+.cat-dock__list { position: static; margin-top: 8px; background: var(--bordeaux); border: 0; backdrop-filter: none; box-shadow: 0 18px 30px -16px rgba(87, 35, 38, .65); }
+.cat-dock__list a { color: rgba(233, 226, 212, .78); }
+.cat-dock__list a:hover, .cat-dock__list a.is-active { background: rgba(233, 226, 212, .14); color: var(--almond); }
+@media (max-width: 700px) { .cat-dock, .cat-dock.is-on, .cat-dock.is-on.is-away { top: 76px; left: 12px; } }

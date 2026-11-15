@@ -1043,3 +1043,21 @@ body:has(.header.is-hidden) .cat-dock { top: 14px; }
 .cat-dock__list a { color: rgba(233, 226, 212, .78); }
 .cat-dock__list a:hover, .cat-dock__list a.is-active { background: rgba(233, 226, 212, .14); color: var(--almond); }
 @media (max-width: 700px) { .cat-dock, .cat-dock.is-on, .cat-dock.is-on.is-away { top: 76px; left: 12px; } }
+
+/* Categorías de la carta: separadas, subrayadas y con una florecita entre ellas para que no parezcan una frase */
+.menu-nav .wrap { --g: clamp(34px, 4vw, 58px); gap: var(--g); height: 60px; }
+.fuente-mimosa .menu-nav a, .menu-nav a {
+  position: relative; color: var(--bordeaux);
+  text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 7px; text-decoration-color: rgba(87, 35, 38, .35);
+  transition: color .25s, text-decoration-color .25s;
+}
+.menu-nav a:hover, .menu-nav a.is-active { color: var(--peach); text-decoration-color: currentColor; text-decoration-thickness: 2px; }
+.menu-nav a + a::before {
+  content: ""; position: absolute; top: 50%; left: calc(var(--g) / -2); width: 10px; height: 10px; translate: -50% -50%;
+  background: var(--gold); pointer-events: none;
+  -webkit-mask: url("../img/marca/flor-3.svg") center / contain no-repeat; mask: url("../img/marca/flor-3.svg") center / contain no-repeat;
+}
+/* El desplegable flotante, igual: cada categoría subrayada */
+.cat-dock__list { gap: 4px; }
+.cat-dock__list a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; text-decoration-color: rgba(233, 226, 212, .35); }
+.cat-dock__list a.is-active, .cat-dock__list a:hover { text-decoration-color: currentColor; }

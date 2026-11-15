@@ -1520,3 +1520,6 @@ body.menu-open .header .brand__logo { color: var(--almond) !important; }
 
 /* Inicio · «Mimosa en fotos»: título centrado y el botón de Instagram debajo */
 .section-head:has(+ .masonry) { flex-direction: column; align-items: center; text-align: center; gap: 18px; }
+
+/* Portada: sin el destello claro detrás de «mimosa», se ve el mantel entero */
+.portada-cafe::before { display: none !important; }

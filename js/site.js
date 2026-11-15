@@ -10,7 +10,7 @@
   const onScroll = () => {
     const y = scrollY;
     header.classList.toggle('is-solid', y > 40);
-    header.classList.toggle('is-hidden', y > 500 && y > lastY && !document.body.classList.contains('menu-open'));
+    header.classList.remove('is-hidden'); // la cabecera flotante se queda siempre visible al bajar
     lastY = y;
   };
   addEventListener('scroll', onScroll, { passive: true });
@@ -77,15 +77,7 @@
 
   /* ---------- Cintas de fotos en bucle (inicio, carta, eventos…) ---------- */
   // Las tiras .strip se convierten en cinta automática igual que "Lo que sale del horno"
-  $$('.strip').forEach(strip => {
-    const track = document.createElement('div');
-    track.className = 'loop__track';
-    while (strip.firstChild) track.appendChild(strip.firstChild);
-    strip.appendChild(track);
-    strip.classList.add('loop', 'loop--strip');
-    strip.dataset.loop = '';
-    strip.dataset.speed = '35';
-  });
+  // (las tiras .strip se mueven con el deslizador, al final del archivo)
   $$('[data-loop]').forEach(loop => {
     const track = loop.querySelector('.loop__track');
     const originals = [...track.children];
@@ -143,7 +135,7 @@
   }
   // Desplegable lateral: aparece cuando la barra de categorías sale de pantalla
   if (dock) {
-    const bar = $('.menu-nav'), btn = $('.cat-dock__btn', dock);
+    const bar = $('.menu-nav') || $('.page-intro') || $('.chapter'), btn = $('.cat-dock__btn', dock);
     new IntersectionObserver(([e]) => {
       dock.classList.toggle('is-on', !e.isIntersecting && e.boundingClientRect.top < 0);
       if (e.isIntersecting) { dock.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); }
@@ -151,7 +143,10 @@
     // en el bloque de encargos (formulario) el desplegable se aparta para no tapar nada
     const enc = $('#encargos');
     if (enc) new IntersectionObserver(([e]) => dock.classList.toggle('is-away', e.isIntersecting), { rootMargin: '-25% 0px -25% 0px' }).observe(enc);
-    btn.addEventListener('click', () => btn.setAttribute('aria-expanded', dock.classList.toggle('is-open')));
+    btn.addEventListener('click', e => { if (e.pointerType === 'mouse' && dock.classList.contains('is-open')) return; btn.setAttribute('aria-expanded', dock.classList.toggle('is-open')); });
+    // con ratón: se abre solo al poner el cursor sobre el botón y se cierra al salir del desplegable
+    btn.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') { dock.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true'); } });
+    dock.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') { dock.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); } });
     $$('a', dock).forEach(a => a.addEventListener('click', () => { dock.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); }));
     document.addEventListener('click', e => { if (!dock.contains(e.target)) { dock.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); } });
   }
@@ -203,6 +198,7 @@
    Mientras esté vacío, los botones abren el chat de Instagram.
    ========================================================== */
 const MIMOSA_WHATSAPP = '';
+const MIMOSA_TELEFONO = ''; // p. ej. '+34 600 000 000'; mientras esté vacío no se muestra «Llamar»
 
 (() => {
   const $ = (s, c = document) => c.querySelector(s);
@@ -264,7 +260,7 @@ const MIMOSA_WHATSAPP = '';
     document.body.appendChild(lb);
     const img = $('img', lb), cap = $('p', lb);
     let group = [], i = 0;
-    const show = () => { const im = group[i].querySelector('img'); img.src = im.currentSrc || im.src; img.alt = im.alt; cap.textContent = im.alt; };
+    const show = () => { const im = group[i].querySelector('img'); img.src = im.currentSrc || im.src; img.alt = im.alt; cap.textContent = group.length > 1 ? `${im.alt} · ${i + 1} / ${group.length}` : im.alt; };
     const open = el => {
       group = items.filter(x => x.dataset.zoom === el.dataset.zoom);
       i = group.indexOf(el); show();
@@ -287,6 +283,26 @@ const MIMOSA_WHATSAPP = '';
     $('.lb-prev', lb).onclick = () => step(-1);
     $('.lb-next', lb).onclick = () => step(1);
     lb.addEventListener('click', e => { if (e.target === lb) close(); });
+    // Móvil: deslizar con el dedo para pasar de foto (izquierda/derecha) o para cerrar (hacia abajo)
+    let tx = 0, ty = 0, moviendo = false;
+    lb.addEventListener('touchstart', e => {
+      if (e.touches.length !== 1) return;
+      tx = e.touches[0].clientX; ty = e.touches[0].clientY; moviendo = true;
+      img.style.transition = 'none';
+    }, { passive: true });
+    lb.addEventListener('touchmove', e => {
+      if (!moviendo || e.touches.length !== 1) return;
+      const dx = e.touches[0].clientX - tx, dy = e.touches[0].clientY - ty;
+      if (Math.abs(dx) > Math.abs(dy)) { img.style.transform = `translateX(${dx}px) rotate(${dx / 40}deg)`; e.preventDefault(); }
+      else if (dy > 0) { img.style.transform = `translateY(${dy}px) scale(${1 - Math.min(dy, 300) / 1500})`; e.preventDefault(); }
+    }, { passive: false });
+    lb.addEventListener('touchend', e => {
+      if (!moviendo) return; moviendo = false;
+      const t = e.changedTouches[0], dx = t.clientX - tx, dy = t.clientY - ty;
+      img.style.transition = 'transform .3s ease'; img.style.transform = '';
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
+      else if (dy > 90 && dy > Math.abs(dx)) close();
+    });
     addEventListener('keydown', e => {
       if (!lb.classList.contains('is-open')) return;
       if (e.key === 'Escape') close();
@@ -319,11 +335,26 @@ const MIMOSA_WHATSAPP = '';
     svg.textContent = '';
     const dx = e.x - m.x, dy = e.y - m.y;
     const sw = Math.max(Math.abs(dx) * 0.5, h.width * 0.2);
-    const c1 = { x: m.x + Math.max(dx * 0.55, sw), y: m.y + dy * 0.22 };
-    const c2 = { x: e.x - Math.max(dx * 0.4, sw * 0.9), y: e.y + dy * 0.04 };
-    const bez = (t, k) => (1 - t) ** 3 * m[k] + 3 * (1 - t) ** 2 * t * c1[k] + 3 * (1 - t) * t * t * c2[k] + t ** 3 * e[k];
-    const der = (t, k) => 3 * (1 - t) ** 2 * (c1[k] - m[k]) + 6 * (1 - t) * t * (c2[k] - c1[k]) + 3 * t * t * (e[k] - c2[k]);
-    const centro = `M ${m.x} ${m.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${e.x} ${e.y}`;
+    // En pantallas anchas (logo a la derecha de la taza) el café cae primero por su peso y luego corre hacia la «m»;
+    // en el móvil (logo debajo de la taza) se mantiene la curva en S que ya funcionaba.
+    // Ordenador: el café cae por su peso, hace una curva más sobre la mesa y entra en la «m».
+    // Móvil (hasta 760 px): la curva en S de siempre, sin cambios.
+    const ancho = matchMedia('(min-width: 761px)').matches && dx > Math.abs(dy) * 1.2;
+    let segs;
+    if (ancho) {
+      const mid = { x: m.x + dx * 0.42, y: e.y + l.height * 0.95 };
+      segs = [
+        [m, { x: m.x + dx * 0.04, y: m.y + Math.max(dy, 0) * 0.6 + l.height * 1.25 }, { x: mid.x - dx * 0.24, y: mid.y + l.height * 0.55 }, mid],
+        [mid, { x: mid.x + dx * 0.22, y: mid.y - l.height * 0.7 }, { x: e.x - dx * 0.22, y: e.y + l.height * 0.75 }, e]
+      ];
+    } else {
+      segs = [[m, { x: m.x + Math.max(dx * 0.55, sw), y: m.y + dy * 0.22 }, { x: e.x - Math.max(dx * 0.4, sw * 0.9), y: e.y + dy * 0.04 }, e]];
+    }
+    const S = segs.length;
+    const trozo = t => { const i = Math.min(S - 1, Math.floor(t * S)); return [segs[i], Math.min(1, t * S - i)]; };
+    const bez = (t, k) => { const [[a0, a1, a2, a3], u] = trozo(t); return (1 - u) ** 3 * a0[k] + 3 * (1 - u) ** 2 * u * a1[k] + 3 * (1 - u) * u * u * a2[k] + u ** 3 * a3[k]; };
+    const der = (t, k) => { const [[a0, a1, a2, a3], u] = trozo(t); return 3 * (1 - u) ** 2 * (a1[k] - a0[k]) + 6 * (1 - u) * u * (a2[k] - a1[k]) + 3 * u * u * (a3[k] - a2[k]); };
+    const centro = `M ${m.x} ${m.y} ` + segs.map(([, a1, a2, a3]) => `C ${a1.x} ${a1.y}, ${a2.x} ${a2.y}, ${a3.x} ${a3.y}`).join(' ');
 
     // Grosor: ancho al salir de la taza, se estrecha hasta el trazo de la letra, con pequeñas ondas de líquido
     const wIni = Math.max(10, l.height * 0.34), wFin = Math.max(4, l.height * 0.1);
@@ -379,7 +410,10 @@ const MIMOSA_WHATSAPP = '';
     hero.classList.add('is-escrito');
   }
 
+  let empezado = false;
   function animar() {
+    if (empezado) return;
+    empezado = true;
     const { p, gotas, ancho } = construir();
     const len = p.getTotalLength();
     const t1 = Math.max(650, len / VEL * 1000);
@@ -402,6 +436,10 @@ const MIMOSA_WHATSAPP = '';
     requestAnimationFrame(finalEstatico);
   } else {
     taza.addEventListener('animationend', animar, { once: true });
+    // Si el navegador pausa la animación de la taza (pestaña en segundo plano, ahorro de batería…), arrancamos igual
+    setTimeout(animar, 1700);
+    // y, pase lo que pase, los botones y el eslogan quedan visibles y se pueden tocar
+    setTimeout(() => { hero.classList.add('is-escrito'); logo.classList.add('is-writing'); }, 6500);
   }
   let t;
   addEventListener('resize', () => {
@@ -484,6 +522,125 @@ const MIMOSA_WHATSAPP = '';
 
 /* Carta: «ver fotos» abre la galería de esa categoría */
 document.querySelectorAll('[data-fotos]').forEach(b => b.addEventListener('click', () => {
-  const f = document.querySelector('.carta-fotos [data-zoom="' + b.dataset.fotos + '"]');
+  const f = document.querySelector('[data-zoom="' + b.dataset.fotos + '"]');
   if (f) f.click();
 }));
+
+/* Botones ilustrados: la versión animada se carga solo al pasar el ratón o, en el móvil, al verse en pantalla */
+(function () {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const hover = matchMedia('(hover: hover)').matches;
+  document.querySelectorAll('.ilu-btn img[data-anim]').forEach(img => {
+    const still = img.getAttribute('src'), anim = img.dataset.anim;
+    let pre = null, on = false;
+    const play = () => {
+      on = true;
+      if (!pre) { pre = new Image(); pre.src = anim; }
+      if (pre.complete && pre.naturalWidth) img.src = anim;
+      else pre.onload = () => { if (on) img.src = anim; };
+    };
+    const stop = () => { on = false; img.src = still; };
+    if (hover) {
+      const a = img.closest('a');
+      a.addEventListener('pointerenter', play); a.addEventListener('pointerleave', stop);
+      a.addEventListener('focus', play); a.addEventListener('blur', stop);
+    } else if ('IntersectionObserver' in window) {
+      new IntersectionObserver(es => es.forEach(e => (e.isIntersecting ? play() : stop())), { threshold: .6 }).observe(img);
+    }
+  });
+})();
+
+/* Mapa: en iPhone, iPad y Mac abre Apple Maps; en el resto, Google Maps. Teléfono: solo si está puesto */
+(function () {
+  const apple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+  const APPLE = 'https://maps.apple.com/?daddr=27.7679395,-15.5447249';   // indicaciones hasta el punto exacto, sin buscar por nombre
+  if (apple) document.querySelectorAll('[data-mapa]').forEach(a => { a.href = APPLE; });
+  if (MIMOSA_TELEFONO) document.querySelectorAll('[data-tel]').forEach(a => {
+    a.href = 'tel:' + MIMOSA_TELEFONO.replace(/[^+\d]/g, '');
+    a.querySelector('span').textContent = 'Llamar · ' + MIMOSA_TELEFONO;
+    a.hidden = false;
+  });
+})();
+
+/* Logo de la cabecera flotante: cambia de color según la sección de la página que tienes delante */
+(function () {
+  const header = document.querySelector('.header'), main = document.querySelector('main');
+  if (!header || !main) return;
+  const COLORES = ['#E9E2D4', '#DDC47C', '#BE7B65', '#8FABBA'];   // crema, oro, melocotón, azul
+  let bloques = [];
+  const medir = () => {
+    bloques = [];
+    [...main.children].forEach(el => {
+      const dentro = el.querySelectorAll(':scope > section');
+      (dentro.length > 1 ? [...dentro] : [el]).forEach(b => { if (b.offsetHeight > 80) bloques.push(b); });
+    });
+  };
+  let pend = false, actual = -1;
+  const pintar = () => {
+    pend = false;
+    const y = 90;
+    let i = bloques.findIndex(b => { const r = b.getBoundingClientRect(); return r.top <= y && r.bottom > y; });
+    if (i < 0) i = bloques.length - 1;
+    if (i !== actual) { actual = i; header.style.setProperty('--logo', COLORES[i % COLORES.length]); }
+  };
+  medir(); pintar();
+  addEventListener('scroll', () => { if (!pend) { pend = true; requestAnimationFrame(pintar); } }, { passive: true });
+  addEventListener('resize', () => { medir(); pintar(); });
+  addEventListener('load', () => { medir(); pintar(); });
+})();
+
+/* Deslizador: vitrina y tiras de fotos se mueven solas, despacio y sin tirones (también en el móvil),
+   y se pueden arrastrar con el ratón o deslizar con el dedo */
+(function () {
+  const filas = document.querySelectorAll('.vitrina__balda, .strip');
+  if (!filas.length) return;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  filas.forEach((b, n) => {
+    const originales = [...b.children];
+    if (!originales.length) return;
+    b.classList.add('desliza');
+    if (originales.length < 3) { b.classList.add('desliza--quieta'); return; }   // con una o dos fotos se queda quieta
+    const pista = document.createElement('div');
+    pista.className = 'desliza__pista';
+    originales.forEach(el => pista.appendChild(el));
+    b.appendChild(pista);
+    const copiar = () => originales.forEach(el => {
+      const c = el.cloneNode(true); c.setAttribute('aria-hidden', 'true'); c.tabIndex = -1; c.classList.add('is-clone');
+      if (c.matches('[data-zoom]')) c.addEventListener('click', () => el.click());   // la copia abre la foto original
+      pista.appendChild(c);
+    });
+    copiar();
+    let vuelta = 0;
+    const medir = () => { vuelta = pista.children[originales.length].offsetLeft - originales[0].offsetLeft; let k = 0; while (pista.scrollWidth < vuelta * 2 + b.clientWidth + 40 && k++ < 8) copiar(); };
+    medir(); addEventListener('resize', medir);
+    const dir = n % 2 ? -1 : 1, vel = b.classList.contains('vitrina__balda') ? 19 : 17;   // px por segundo
+    let pos = dir < 0 ? vuelta : 0, pausa = 0, sobre = false, visible = true, arr = null, antes = 0;
+    const parar = ms => { pausa = performance.now() + ms; };
+    const pintar = () => { if (vuelta) { pos = ((pos % vuelta) + vuelta) % vuelta; } pista.style.transform = `translate3d(${-pos}px,0,0)`; };
+    b.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') sobre = true; });
+    b.addEventListener('pointerleave', () => { sobre = false; });
+    b.addEventListener('wheel', e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) { pos += e.deltaX; pintar(); parar(2500); e.preventDefault(); } }, { passive: false });
+    b.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      arr = { x: e.clientX, y: e.clientY, p: pos, movido: false, id: e.pointerId };
+    });
+    b.addEventListener('pointermove', e => {
+      if (!arr || e.pointerId !== arr.id) return;
+      const dx = e.clientX - arr.x;
+      if (!arr.movido && Math.abs(dx) > 6) { arr.movido = true; b.classList.add('is-arrastrando'); try { b.setPointerCapture(e.pointerId); } catch (_) {} }
+      if (arr.movido) { pos = arr.p - dx; pintar(); }
+    });
+    const soltar = () => {
+      if (!arr) return; const m = arr.movido; arr = null; b.classList.remove('is-arrastrando'); parar(m ? 2500 : 0);
+      if (m) b.addEventListener('click', ev => { ev.preventDefault(); ev.stopPropagation(); }, { once: true, capture: true });
+    };
+    b.addEventListener('pointerup', soltar); b.addEventListener('pointercancel', soltar);
+    if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(b);
+    const paso = t => {
+      const dt = antes ? Math.min(64, t - antes) : 16; antes = t;
+      if (!reduce && visible && !sobre && !arr && t > pausa) { pos += dir * vel * dt / 1000; pintar(); }
+      requestAnimationFrame(paso);
+    };
+    pintar(); requestAnimationFrame(paso);
+  });
+})();

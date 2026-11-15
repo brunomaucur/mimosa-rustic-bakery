@@ -1044,20 +1044,362 @@ body:has(.header.is-hidden) .cat-dock { top: 14px; }
 .cat-dock__list a:hover, .cat-dock__list a.is-active { background: rgba(233, 226, 212, .14); color: var(--almond); }
 @media (max-width: 700px) { .cat-dock, .cat-dock.is-on, .cat-dock.is-on.is-away { top: 76px; left: 12px; } }
 
-/* Categorías de la carta: separadas, subrayadas y con una florecita entre ellas para que no parezcan una frase */
-.menu-nav .wrap { --g: clamp(34px, 4vw, 58px); gap: var(--g); height: 60px; }
-.fuente-mimosa .menu-nav a, .menu-nav a {
-  position: relative; color: var(--bordeaux);
-  text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 7px; text-decoration-color: rgba(87, 35, 38, .35);
+
+/* Menú general: cada apartado separado y subrayado para que no se lea como una frase */
+.mobile-menu nav { gap: clamp(12px, 2.4vh, 26px); }
+.fuente-mimosa .mobile-menu a.big, .mobile-menu a.big {
+  line-height: 1.1; padding-bottom: .08em;
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em; text-decoration-color: rgba(233, 226, 212, .4);
   transition: color .25s, text-decoration-color .25s;
 }
-.menu-nav a:hover, .menu-nav a.is-active { color: var(--peach); text-decoration-color: currentColor; text-decoration-thickness: 2px; }
-.menu-nav a + a::before {
-  content: ""; position: absolute; top: 50%; left: calc(var(--g) / -2); width: 10px; height: 10px; translate: -50% -50%;
-  background: var(--gold); pointer-events: none;
-  -webkit-mask: url("../img/marca/flor-3.svg") center / contain no-repeat; mask: url("../img/marca/flor-3.svg") center / contain no-repeat;
+.mobile-menu a.big:hover, .mobile-menu a.big[aria-current="page"] { color: var(--gold); text-decoration-color: currentColor; }
+@media (min-width: 1021px) { .mobile-menu a.big { font-size: clamp(2.6rem, 5vw, 4.4rem); } }
+.mobile-menu nav { gap: clamp(22px, 3.6vh, 38px); }
+@media (max-width: 1020px) { .mobile-menu a.big { font-size: clamp(2.4rem, 10.5vw, 4rem); } }
+
+/* Texto más legible sobre el beige: tonos más oscuros y trazo algo más grueso */
+:root { --ink: #43181b; --ink-2: #4d2326; --muted: #66403d; }
+body { -webkit-text-stroke: .25px currentColor; }
+p, li, .lead, .muted, .note, figcaption, .items p, .product p, .faq__resp, address { -webkit-text-stroke: .3px currentColor; }
+
+/* ===== Botones ilustrados (de Codex): imagen fija y, al pasar el ratón o al verse en el móvil, la animada ===== */
+.ilu-btn { display: inline-block; width: clamp(150px, 15vw, 200px); line-height: 0; vertical-align: middle;
+  transition: transform .45s cubic-bezier(.2, 1.4, .4, 1), opacity 1s var(--ease); filter: drop-shadow(0 10px 12px rgba(87, 35, 38, .18)); }
+.ilu-btn img { display: block; width: 100%; height: auto; }
+.ilu-btn:hover, .js .ilu-btn[data-reveal].is-in:hover { transform: translateY(-4px) rotate(-2deg); }
+.ilu-btn:active { transform: scale(.96); }
+.ilu-btn:focus-visible { outline: 2px solid var(--bordeaux); outline-offset: 6px; border-radius: 10px; }
+.ilu-fila { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: clamp(10px, 2vw, 28px); }
+.portada-cafe .ilu-fila .ilu-btn { width: clamp(170px, 16vw, 220px); }
+@media (max-width: 760px) {
+  .cafe-ctas.ilu-fila { flex-direction: row; }
+  .portada-cafe .ilu-fila .ilu-btn { width: 42vw; }
+  .ilu-btn { width: 46vw; max-width: 220px; }
 }
-/* El desplegable flotante, igual: cada categoría subrayada */
-.cat-dock__list { gap: 4px; }
-.cat-dock__list a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; text-decoration-color: rgba(233, 226, 212, .35); }
-.cat-dock__list a.is-active, .cat-dock__list a:hover { text-decoration-color: currentColor; }
+
+/* ===== El logo cambia de color según la página, siempre con buen contraste ===== */
+/* Velo suave detrás de la cabecera mientras está sobre los manteles, para que logo y menú se lean */
+.header:not(.is-solid) { background: linear-gradient(180deg, rgba(233, 226, 212, .94) 0%, rgba(233, 226, 212, .72) 55%, rgba(233, 226, 212, 0) 100%); }
+.header.on-dark:not(.is-solid) { background: linear-gradient(180deg, rgba(87, 35, 38, .92) 0%, rgba(87, 35, 38, .6) 55%, rgba(87, 35, 38, 0) 100%); }
+body.menu-open .header { background: transparent !important; }
+/* Sobre fondo claro: texto y menú en burdeos; el logo, del color de cada página */
+.header:not(.on-dark):not(.is-solid) { color: var(--bordeaux); }
+[data-page="carta"] .header .brand__logo { color: #9a5440; }          /* melocotón tostado */
+[data-page="nosotros"] .header .brand__logo { color: var(--bordeaux); }
+[data-page="eventos"] .header .brand__logo,
+[data-page="preguntas"] .header .brand__logo { color: #45697b; }       /* azul acero oscuro */
+[data-page="visitanos"] .header.on-dark:not(.is-solid) .brand__logo { color: var(--gold); }
+body.menu-open .header .brand__logo { color: var(--almond) !important; }
+/* Logo grande del pie (sobre burdeos) */
+[data-page="carta"] .footer__logo, [data-page="visitanos"] .footer__logo { background: var(--gold); }
+[data-page="nosotros"] .footer__logo { background: var(--peach); }
+[data-page="eventos"] .footer__logo, [data-page="preguntas"] .footer__logo { background: var(--steel); }
+@media (max-width: 760px) { .cafe-deco .ilus--flor-2 { right: auto; left: 5vw; bottom: 13vh; } }
+
+/* ===== Cabecera flotante al bajar: cápsula con los apartados, en la letra del texto ===== */
+.header { transition: background .4s, color .4s, border-color .4s, box-shadow .4s, top .45s var(--ease), width .45s var(--ease), border-radius .45s var(--ease), transform .5s var(--ease); }
+.header.is-solid {
+  top: 12px; left: 0; right: 0; margin-inline: auto; width: min(1180px, calc(100% - 28px));
+  border-radius: 999px; background: rgba(243, 238, 228, .9); color: var(--bordeaux);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15); backdrop-filter: blur(14px) saturate(1.15);
+  border: 1px solid rgba(87, 35, 38, .14); box-shadow: 0 16px 36px -20px rgba(87, 35, 38, .5);
+}
+.header.is-solid .header__in { width: 100%; height: 60px; padding: 0 10px 0 26px; gap: 18px; }
+.header.is-solid .brand__logo { width: 98px; }
+.header.is-solid .brand__tag { display: none; }
+.menu-open .header.is-solid { box-shadow: none !important; }
+@media (min-width: 1021px) {
+  .header.is-solid .nav { display: flex !important; gap: 4px; margin-left: auto; }
+  .header.is-solid .menu-btn { display: none; }
+  .fuente-mimosa .header.is-solid .nav a, .header.is-solid .nav a {
+    font-family: var(--type), serif; font-style: italic; font-weight: 400; text-transform: none; letter-spacing: .01em;
+    -webkit-text-stroke: .3px currentColor; font-size: 15.5px; line-height: 1; white-space: nowrap;
+    padding: 10px 15px; border-radius: 999px; opacity: 1; color: var(--bordeaux); transition: background .25s, color .25s;
+  }
+  .header.is-solid .nav a::after { display: none; }
+  .header.is-solid .nav a:hover { background: rgba(221, 196, 124, .35); }
+  .header.is-solid .nav a[aria-current="page"] { background: var(--bordeaux); color: var(--almond); }
+}
+@media (max-width: 1020px) {
+  .header.is-solid { top: 10px; width: calc(100% - 20px); }
+  .header.is-solid .header__in { height: 54px; padding: 0 16px 0 20px; }
+  .header.is-solid .brand__logo { width: 88px; }
+}
+/* El selector de la carta, justo debajo de la cabecera flotante */
+.cat-dock, .cat-dock.is-on, .cat-dock.is-on.is-away { top: 92px; }
+@media (max-width: 1020px) { .cat-dock, .cat-dock.is-on, .cat-dock.is-on.is-away { top: 76px; } }
+
+/* ===== PRUEBA: cada apartado de la cabecera flotante como una pastilla con mantel de vichy ===== */
+@media (min-width: 1021px) {
+  .header.is-solid .nav { gap: 8px; }
+  .header.is-solid .nav a {
+    --vichy: url("../img/marca/fondo-vichy-oro.jpg");
+    background: linear-gradient(rgba(243, 238, 228, .5), rgba(243, 238, 228, .5)), var(--vichy) center / 240px auto;
+    box-shadow: inset 0 0 0 1px rgba(87, 35, 38, .16);
+    transition: transform .3s cubic-bezier(.2, 1.4, .4, 1), box-shadow .25s;
+  }
+  .header.is-solid .nav a:nth-child(2) { --vichy: url("../img/marca/fondo-vichy-melocoton.jpg"); }
+  .header.is-solid .nav a:nth-child(3) { --vichy: url("../img/marca/fondo-vichy-azul.jpg"); }
+  .header.is-solid .nav a:nth-child(4) { --vichy: url("../img/marca/fondo-vichy-oro.jpg"); }
+  .header.is-solid .nav a:nth-child(5) { --vichy: url("../img/marca/fondo-vichy-melocoton.jpg"); }
+  .header.is-solid .nav a:nth-child(6) { --vichy: url("../img/marca/fondo-vichy-azul.jpg"); }
+  .header.is-solid .nav a:hover { background: linear-gradient(rgba(243, 238, 228, .3), rgba(243, 238, 228, .3)), var(--vichy) center / 240px auto; transform: translateY(-2px) rotate(-1.5deg); }
+  .header.is-solid .nav a[aria-current="page"] {
+    background: linear-gradient(rgba(243, 238, 228, .25), rgba(243, 238, 228, .25)), var(--vichy) center / 240px auto;
+    color: var(--bordeaux); box-shadow: inset 0 0 0 2px var(--bordeaux);
+  }
+}
+/* Letras de los apartados con mantel: más oscuras y con más cuerpo */
+@media (min-width: 1021px) {
+  .fuente-mimosa .header.is-solid .nav a, .header.is-solid .nav a {
+    color: var(--ink); font-size: 16px; -webkit-text-stroke: .75px currentColor;
+    text-shadow: 0 0 6px rgba(243, 238, 228, .95), 0 0 2px rgba(243, 238, 228, .9);
+    background: linear-gradient(rgba(243, 238, 228, .62), rgba(243, 238, 228, .62)), var(--vichy) center / 240px auto;
+  }
+  .header.is-solid .nav a:hover { background: linear-gradient(rgba(243, 238, 228, .45), rgba(243, 238, 228, .45)), var(--vichy) center / 240px auto; }
+  .header.is-solid .nav a[aria-current="page"] { color: var(--ink); background: linear-gradient(rgba(243, 238, 228, .4), rgba(243, 238, 228, .4)), var(--vichy) center / 240px auto; }
+}
+
+/* ===== Iconitos animados de cada apartado en la cabecera flotante ===== */
+.nav-ico { display: none; }
+@media (min-width: 1021px) {
+  .header.is-solid .nav a { display: inline-flex; align-items: center; gap: 7px; }
+  .header.is-solid .nav-ico { display: inline-block; flex: none; width: 17px; height: 17px; overflow: visible; filter: drop-shadow(0 1px 0 rgba(243, 238, 228, .9)); -webkit-text-stroke: 0; }
+  .nav-ico--flor { background: var(--gold); -webkit-mask: url("../img/marca/isotipo.svg") center / contain no-repeat; mask: url("../img/marca/isotipo.svg") center / contain no-repeat; animation: ico-gira 9s linear infinite; }
+  .nav-ico--taza .vapor { fill: none; stroke: #8a6560; stroke-width: 1.4; stroke-linecap: round; opacity: 0; animation: ico-vapor 2.4s ease-in-out infinite; }
+  .nav-ico--taza .v2 { animation-delay: 1.2s; }
+  .nav-ico--corazon { transform-origin: 50% 60%; animation: ico-late 1.8s ease-in-out infinite; }
+  .nav-ico--tarta .llama { transform-box: fill-box; transform-origin: 50% 100%; animation: ico-llama .9s ease-in-out infinite alternate; }
+  .nav-ico--pin path, .nav-ico--pin circle { animation: ico-salta 2.2s cubic-bezier(.3, 0, .3, 1) infinite; }
+  .nav-ico--pin .sombra { transform-box: fill-box; transform-origin: center; animation: ico-sombra 2.2s cubic-bezier(.3, 0, .3, 1) infinite; }
+  .nav-ico--chat .p { animation: ico-punto 1.4s ease-in-out infinite; }
+  .nav-ico--chat .p2 { animation-delay: .18s; } .nav-ico--chat .p3 { animation-delay: .36s; }
+  .header.is-solid .nav a:hover .nav-ico { animation-duration: .9s; }
+}
+@keyframes ico-gira { to { transform: rotate(360deg); } }
+@keyframes ico-vapor { 0% { opacity: 0; transform: translateY(2px); } 40% { opacity: .9; } 100% { opacity: 0; transform: translateY(-3px); } }
+@keyframes ico-late { 0%, 60%, 100% { transform: scale(1); } 15% { transform: scale(1.18); } 30% { transform: scale(.96); } 45% { transform: scale(1.1); } }
+@keyframes ico-llama { from { transform: scaleY(.85) rotate(-6deg); } to { transform: scaleY(1.12) rotate(6deg); } }
+@keyframes ico-salta { 0%, 55%, 100% { transform: translateY(0); } 25% { transform: translateY(-3.5px); } }
+@keyframes ico-sombra { 0%, 55%, 100% { transform: scale(1); opacity: .25; } 25% { transform: scale(.7); opacity: .12; } }
+@keyframes ico-punto { 0%, 60%, 100% { transform: translateY(0); opacity: .55; } 30% { transform: translateY(-1.6px); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .nav-ico, .nav-ico * { animation: none !important; } .nav-ico--taza .vapor { opacity: .7; } }
+@media (min-width: 1021px) and (max-width: 1199px) { .header.is-solid .nav { display: none !important; } .header.is-solid .menu-btn { display: inline-flex; } }
+
+/* ===== Inicio · Visítanos: a la izquierda dónde estamos (mapa y contacto), a la derecha el horario ===== */
+.mantel.visita { padding-top: clamp(60px, 8vw, 110px); padding-bottom: clamp(60px, 8vw, 110px); }
+.visita__grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: clamp(18px, 2.5vw, 32px); align-items: stretch; }
+.visita .card { margin: 0; max-width: none; }
+.visita__dir { font-style: italic; font-size: clamp(1.15rem, 1.6vw, 1.35rem); line-height: 1.4; margin: 10px 0 18px; color: var(--ink); }
+.visita__mapa { border-radius: 14px; overflow: hidden; height: clamp(220px, 24vw, 300px); background: var(--bg-2); box-shadow: inset 0 0 0 1px rgba(87, 35, 38, .12); }
+.visita__mapa iframe { width: 100%; height: 100%; border: 0; filter: grayscale(.3) sepia(.15) contrast(1.02); }
+.visita .contact-list { margin: 14px 0 0; }
+.visita .contact-list a { padding: 13px 0; }
+.visita__tit { margin: 0 0 18px; font-size: clamp(1.9rem, 3vw, 2.6rem); }
+.visita__boton { margin: 22px 0 0; }
+@media (max-width: 860px) {
+  .visita__grid { grid-template-columns: 1fr; }
+  .mantel.visita { padding-top: 56px; }
+}
+/* Iconitos como pegatina: sobre la esquina superior derecha de cada pastilla, medio dentro y medio fuera */
+@media (min-width: 1021px) {
+  .header.is-solid .nav a { position: relative; gap: 0; }
+  .header.is-solid .nav-ico { position: absolute; top: -8px; right: -6px; width: 19px; height: 19px; rotate: 12deg; pointer-events: none;
+    filter: drop-shadow(0 1px 0 rgba(243, 238, 228, .95)) drop-shadow(0 2px 3px rgba(87, 35, 38, .25)); }
+  .header.is-solid .nav a:nth-child(even) .nav-ico { rotate: -10deg; }
+  .header.is-solid .nav { gap: 12px; }
+}
+.contact-list a[hidden] { display: none !important; }
+
+/* ===== Cabecera flotante en burdeos; el logo cambia de color según la sección que estás viendo ===== */
+.header.is-solid {
+  background: rgba(87, 35, 38, .95); color: var(--almond);
+  border-color: rgba(233, 226, 212, .16); box-shadow: 0 16px 36px -18px rgba(40, 14, 16, .7);
+}
+[data-page] .header.is-solid .brand__logo { color: var(--logo, var(--almond)); transition: color .6s ease; }
+.header.is-solid .menu-btn { color: var(--almond); }
+@media (min-width: 1021px) {
+  .header.is-solid .nav a { box-shadow: inset 0 0 0 1px rgba(233, 226, 212, .25); }
+  .header.is-solid .nav a[aria-current="page"] { box-shadow: inset 0 0 0 2px var(--bordeaux), 0 0 0 2px var(--gold); }
+  .header.is-solid .nav-ico { filter: drop-shadow(0 1px 0 rgba(87, 35, 38, .6)) drop-shadow(0 2px 3px rgba(20, 6, 8, .35)); }
+}
+/* Iconos sobre la cabecera burdeos: el vapor en crema y un borde claro para que nada se pierda */
+@media (min-width: 1021px) {
+  .nav-ico--taza .vapor { stroke: #E9E2D4; }
+  .header.is-solid .nav-ico { filter: drop-shadow(0 0 1px rgba(243, 238, 228, .9)) drop-shadow(0 2px 3px rgba(20, 6, 8, .4)); }
+}
+
+/* Botón de reseñas en Google */
+.visita__resena { margin: 18px 0 0; }
+.btn-resena {
+  display: inline-flex; align-items: center; gap: 12px; padding: 12px 20px 12px 16px; border-radius: 999px;
+  background: var(--bordeaux); color: var(--almond); font-family: var(--type), serif; font-style: italic; font-size: 15.5px; line-height: 1.2;
+  box-shadow: 0 10px 20px -12px rgba(87, 35, 38, .6); transition: transform .35s cubic-bezier(.2, 1.4, .4, 1), background .25s;
+}
+.btn-resena__estrellas { color: var(--gold); letter-spacing: 2px; font-style: normal; font-size: 16px; display: inline-flex; }
+.btn-resena:hover { transform: translateY(-3px) rotate(-1deg); background: #6a2b2f; }
+.btn-resena:hover .btn-resena__estrellas { animation: estrellas 1s ease-in-out; }
+@keyframes estrellas { 30% { transform: scale(1.15); color: #f0d68f; } 100% { transform: none; } }
+
+/* Vitrina sin reflejos de cristal (se confundían con un fallo) */
+.vitrina__cristal { display: none; }
+.lightbox { touch-action: none; overscroll-behavior: contain; }
+@media (hover: none) { .lightbox .lb-prev, .lightbox .lb-next { opacity: .55; } }
+
+/* ===== Vitrina en movimiento: cada balda se desliza sola, despacio, y se puede arrastrar ===== */
+.vitrina__balda, .vitrina__balda:last-of-type {
+  display: flex !important; grid-template-columns: none; gap: clamp(12px, 1.6vw, 22px);
+  overflow-x: auto; overflow-y: hidden; scroll-snap-type: none; scrollbar-width: none; overscroll-behavior-x: contain;
+  margin-left: calc(-1 * clamp(14px, 2vw, 28px)); margin-right: calc(-1 * clamp(14px, 2vw, 28px));
+  padding: 14px clamp(14px, 2vw, 28px) 4px;
+  border-bottom: clamp(12px, 1.3vw, 16px) solid #c18f5c; box-shadow: 0 10px 12px -8px rgba(87, 35, 38, .35);
+  cursor: grab;
+}
+.vitrina__balda::-webkit-scrollbar { display: none; }
+.vitrina__balda::after { display: none !important; }
+.vitrina__balda.is-arrastrando { cursor: grabbing; }
+.vitrina__balda .vit { flex: 0 0 clamp(190px, 20%, 250px); scroll-snap-align: none; }
+.vitrina__balda .vit img { -webkit-user-drag: none; user-select: none; pointer-events: none; }
+@media (max-width: 760px) { .vitrina__balda .vit { flex-basis: 44vw; } }
+
+/* Al seleccionar y copiar texto no se cuelan la cabecera flotante, el selector de la carta ni los botones flotantes */
+.header, .cat-dock, .wa-float, .menu-nav, .mobile-menu, .scroll-cue { -webkit-user-select: none; user-select: none; }
+
+/* Títulos sin cambio de letra a mitad de frase (solo se mantiene la firma manuscrita de «Julia») */
+:is(h1, h2, h3, .display, .chapter__title) em:not(.firma) {
+  font-family: inherit !important; font-size: 1em !important; font-style: inherit !important; font-weight: inherit;
+  letter-spacing: inherit; text-transform: inherit; line-height: inherit; -webkit-text-stroke: inherit;
+}
+
+/* Nosotros · «Pasa, siéntate y quédate un rato»: mantel de vichy azul con una tarjeta, en vez de la foto */
+[data-page="nosotros"] .band {
+  min-height: 0; display: grid; place-items: center; padding: clamp(70px, 10vw, 130px) var(--pad);
+  background: url("../img/marca/fondo-vichy-azul.jpg") center / cover; color: var(--bordeaux);
+}
+[data-page="nosotros"] .band__img, [data-page="nosotros"] .band::after { display: none; }
+[data-page="nosotros"] .band__content {
+  width: min(560px, 100%); margin: 0; padding: clamp(28px, 4vw, 48px); text-align: center;
+  background: var(--paper); border-radius: 6px; box-shadow: 0 30px 60px -30px rgba(40, 25, 10, .55), 0 2px 6px rgba(40, 25, 10, .08);
+  display: grid; justify-items: center;
+}
+[data-page="nosotros"] .band__content .label { color: var(--ink-2); margin-bottom: 12px; }
+[data-page="nosotros"] .band__content .h2 { color: var(--bordeaux); max-width: 16ch; margin: 0 auto 22px; }
+
+/* Visítanos · Encargos: mantel de vichy melocotón (distinto del burdeos de la cabecera y del azul de inicio) */
+[data-page="visitanos"] .mantel { background: url("../img/marca/fondo-vichy-melocoton.jpg") center / cover; }
+[data-page="visitanos"] .mantel::before { display: none; }
+@media (max-width: 700px) { [data-page="visitanos"] .mantel { padding-top: clamp(80px, 12vw, 150px); } }
+
+/* Fondo de florecitas de la marca (como «Cuéntanos tu idea»), en otros colores, en vez de mantel */
+[data-page="nosotros"] .band { background: var(--steel) url("../img/marca/pattern-flores-azul.svg") center / 260px auto; }
+[data-page="nosotros"] .band::before { content: ""; position: absolute; inset: 0; background: rgba(143, 171, 186, .86); }
+[data-page="nosotros"] .band__content { position: relative; z-index: 1; }
+[data-page="visitanos"] .mantel { background: var(--peach) url("../img/marca/pattern-flores-melocoton.svg") center / 260px auto; }
+[data-page="visitanos"] .mantel::before { display: block; content: ""; position: absolute; inset: 0; background: rgba(190, 123, 101, .86); }
+[data-page="visitanos"] .mantel .wrap { position: relative; z-index: 1; }
+
+/* Mesa: la carta sube entre la taza y las cookies para que se vea todo de un vistazo */
+@media (min-width: 761px) {
+  .mesa__in { height: clamp(640px, 100vh, 860px); }
+  .mesa__hola { top: 9%; }
+  .mesa__servilleta { top: 25%; }
+  .mesa__taza { top: 29%; }
+  .mesa__cookies { top: 18%; }
+  .mesa__carta { left: 50%; translate: -50% 0; top: 23%; width: clamp(240px, 23vw, 310px); }
+  .mesa__flor.m1 { left: 33%; top: auto; bottom: 10%; }
+  .mesa__flor.m2 { left: 58%; bottom: 7%; }
+  .mesa__flor.m3 { right: 13%; bottom: 8%; }
+}
+@media (max-width: 760px) {
+  .mesa__in { height: 182vw; }
+  .mesa__hola { top: 2.5%; }
+  .mesa__cookies { right: -5%; top: 9%; width: 56vw; }
+  .mesa__taza { left: 4%; top: 30%; width: 42vw; }
+  .mesa__servilleta { left: 2%; top: 28.5%; width: 44vw; }
+  .mesa__carta { right: 5%; left: auto; top: 55%; width: 64vw; }
+  .mesa__flor.m1 { left: 62%; top: 36%; width: 12vw; }
+  .mesa__flor.m2 { left: 5%; bottom: 6%; width: 16vw; }
+  .mesa__flor.m3 { left: 6%; top: 16%; width: 11vw; }
+}
+@media (min-width: 761px) { .mesa__hola { top: 12%; } }
+@media (max-width: 760px) {
+  .mesa__in { height: 192vw; }
+  .mesa__hola { top: 9%; }
+  .mesa__cookies { top: 15%; }
+  .mesa__servilleta { top: 34%; }
+  .mesa__taza { top: 35.5%; }
+  .mesa__carta { top: 60%; }
+  .mesa__flor.m3 { top: 21%; }
+  .mesa__flor.m1 { top: 41%; }
+}
+@media (max-width: 760px) { .mesa__flor.m1 { left: 52%; top: 47%; width: 10vw; } }
+
+/* Cabecera arriba del todo: sin degradado ni línea, todo sobre el mismo fondo de la página */
+.header:not(.is-solid), .header.on-dark:not(.is-solid) { background: transparent !important; border-color: transparent !important; box-shadow: none; }
+
+/* ===== Tiras de fotos que se deslizan solas (eventos, carta…) y se pueden arrastrar ===== */
+.strip.desliza { scroll-snap-type: none; scrollbar-width: none; overscroll-behavior-x: contain; cursor: grab; }
+.strip.desliza::-webkit-scrollbar { display: none; }
+.strip.desliza.is-arrastrando { cursor: grabbing; }
+.strip.desliza img { -webkit-user-drag: none; user-select: none; }
+.strip.desliza > * { scroll-snap-align: none; }
+
+/* Carta: tira pequeña de fotos entre categoría y categoría */
+.carta-tira.strip {
+  display: flex; gap: 10px; overflow-x: auto; margin: 0 calc(-1 * var(--pad)); padding: 6px var(--pad) 26px;
+  grid-auto-flow: unset; grid-auto-columns: unset;
+}
+.carta-tira > figure { flex: 0 0 auto; width: clamp(96px, 9vw, 128px); aspect-ratio: 1; margin: 0; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 8px 14px -10px rgba(87, 35, 38, .5); cursor: zoom-in; transition: transform .35s cubic-bezier(.2, 1.4, .4, 1); }
+.carta-tira > figure:nth-child(odd) { rotate: -1.5deg; } .carta-tira > figure:nth-child(even) { rotate: 1.5deg; }
+.carta-tira > figure:hover { transform: translateY(-4px) scale(1.04); }
+.carta-tira img { width: 100%; height: 100%; object-fit: cover; }
+.carta-tira.desliza--quieta { justify-content: center; }
+@media (max-width: 760px) { .carta-tira > figure { width: 84px; } }
+
+/* ===== Deslizador sin tirones: la pista se mueve con transform (fluido también en el móvil) ===== */
+.desliza:not(.desliza--quieta) { overflow: hidden !important; touch-action: pan-y; }
+.desliza__pista { display: flex; width: max-content; will-change: transform; }
+.strip.desliza:not(.desliza--quieta) { display: block !important; }
+.strip .desliza__pista { gap: 12px; }
+.strip .desliza__pista > * { flex: 0 0 auto; width: clamp(180px, 20vw, 260px); aspect-ratio: 4 / 5; margin: 0; }
+.vitrina__balda .desliza__pista { gap: clamp(12px, 1.6vw, 22px); }
+.vitrina__balda .desliza__pista > .vit { flex: 0 0 clamp(190px, 17vw, 250px); }
+.carta-tira .desliza__pista { gap: 10px; }
+.carta-tira .desliza__pista > figure { width: clamp(96px, 9vw, 128px); aspect-ratio: 1; }
+.carta-tira figure { margin: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 14px -10px rgba(87, 35, 38, .5); cursor: zoom-in; }
+.carta-tira figure:nth-child(odd) { rotate: -1.5deg; } .carta-tira figure:nth-child(even) { rotate: 1.5deg; }
+@media (max-width: 760px) {
+  .vitrina__balda .desliza__pista > .vit { flex-basis: 44vw; }
+  .strip .desliza__pista > * { width: 58vw; }
+  .carta-tira .desliza__pista > figure { width: 84px; }
+}
+.desliza.is-arrastrando { cursor: grabbing; }
+.desliza img { -webkit-user-drag: none; user-select: none; }
+
+/* Selector flotante de la carta: no tapa ni bloquea el texto; solo se abre con el cursor sobre el botón */
+.cat-dock, .cat-dock.is-on, .cat-dock.is-on.is-away { pointer-events: none !important; }
+.cat-dock.is-on .cat-dock__btn { pointer-events: auto; }
+.cat-dock .cat-dock__list { pointer-events: none; }
+@media (hover: hover) { .cat-dock:hover .cat-dock__list { clip-path: inset(0 0 100% 0 round 16px); opacity: 0; } }
+.cat-dock.is-open .cat-dock__list, .cat-dock.is-open:hover .cat-dock__list { clip-path: inset(0 0 0 0 round 16px); opacity: 1; pointer-events: auto; }
+
+/* Carta más compacta: sin foto junto al título y la tira de fotos pegada a su categoría */
+.carta-texto .menu-cat { padding: clamp(34px, 4.5vw, 58px) 0 clamp(10px, 1.5vw, 18px); grid-template-columns: minmax(0, .65fr) minmax(0, 1.35fr); gap: clamp(22px, 4vw, 56px); align-items: start; }
+.carta-texto .menu-cat:nth-of-type(even) { grid-template-columns: minmax(0, 1.35fr) minmax(0, .65fr); }
+.carta-texto .menu-cat__head .h2 { font-size: clamp(1.6rem, 2.5vw, 2.15rem); }
+.menu-cat__lado { padding-top: 6px; }
+.menu-cat__lista .items li { padding: 12px 0 12px 32px; }
+.menu-cat__lista .items li::before { top: 15px; }
+.carta-tira.strip { padding: 4px var(--pad) clamp(20px, 2.5vw, 30px); }
+#tartas + .carta-tira { background: rgba(190, 123, 101, .1); box-shadow: 0 0 0 100vmax rgba(190, 123, 101, .1); clip-path: inset(0 -100vmax); }
+#cafe + .carta-tira { background: rgba(87, 35, 38, .06); box-shadow: 0 0 0 100vmax rgba(87, 35, 38, .06); clip-path: inset(0 -100vmax); }
+@media (max-width: 860px) {
+  .carta-texto .menu-cat, .carta-texto .menu-cat:nth-of-type(even) { grid-template-columns: 1fr; gap: 10px; }
+}
+.desliza__pista { align-items: flex-start; }
+.desliza__pista > figure { height: auto; }
+.carta-tira .desliza__pista > figure, .carta-tira.desliza--quieta > figure { height: clamp(96px, 9vw, 128px); }
+@media (max-width: 760px) { .carta-tira .desliza__pista > figure, .carta-tira.desliza--quieta > figure { height: 84px; } }
+.carta-tira.desliza--quieta > figure { width: clamp(96px, 9vw, 128px); flex: 0 0 auto; }
+.strip > .desliza__pista { aspect-ratio: auto !important; height: auto !important; }

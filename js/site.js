@@ -131,7 +131,7 @@
         });
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
-    $$('.menu-cat, #encargos').forEach(s => spy.observe(s));
+    $$('.menu-cat, .offer, #encargos').forEach(s => spy.observe(s));
   }
   // Desplegable lateral: aparece cuando la barra de categorías sale de pantalla
   if (dock) {
@@ -145,8 +145,15 @@
     if (enc) new IntersectionObserver(([e]) => dock.classList.toggle('is-away', e.isIntersecting), { rootMargin: '-25% 0px -25% 0px' }).observe(enc);
     btn.addEventListener('click', e => { if (e.pointerType === 'mouse' && dock.classList.contains('is-open')) return; btn.setAttribute('aria-expanded', dock.classList.toggle('is-open')); });
     // con ratón: se abre solo al poner el cursor sobre el botón y se cierra al salir del desplegable
-    btn.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') { dock.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true'); } });
-    dock.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') { dock.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); } });
+    // y se queda abierto mientras el cursor esté en el botón o en la lista (con un pequeño margen para pasar de uno a otra)
+    const lista = $('.cat-dock__list', dock);
+    let cierre = null;
+    const abrir = () => { clearTimeout(cierre); dock.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true'); };
+    const cerrarLuego = () => { clearTimeout(cierre); cierre = setTimeout(() => { dock.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); }, 450); };
+    btn.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') abrir(); });
+    lista.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse' && dock.classList.contains('is-open')) abrir(); });
+    btn.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') cerrarLuego(); });
+    lista.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') cerrarLuego(); });
     $$('a', dock).forEach(a => a.addEventListener('click', () => { dock.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); }));
     document.addEventListener('click', e => { if (!dock.contains(e.target)) { dock.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); } });
   }
@@ -227,6 +234,12 @@ const MIMOSA_TELEFONO = ''; // p. ej. '+34 600 000 000'; mientras esté vacío n
   if (form) {
     const date = form.querySelector('[name=fecha]');
     date.min = new Date(Date.now() + 3 * 864e5).toISOString().slice(0, 10);
+    // Ocasión: lista con las más habituales y «Otra…» abre un campo para escribirla
+    const ocasion = form.querySelector('[name=ocasion]'), otra = form.querySelector('[name=ocasion_otra]');
+    if (ocasion && otra) ocasion.addEventListener('change', () => {
+      otra.hidden = ocasion.value !== 'otra';
+      if (!otra.hidden) otra.focus();
+    });
     form.addEventListener('submit', e => {
       e.preventDefault();
       const f = Object.fromEntries(new FormData(form));
@@ -238,7 +251,7 @@ const MIMOSA_TELEFONO = ''; // p. ej. '+34 600 000 000'; mientras esté vacío n
         `- Encargo: ${f.tarta}`,
         `- Tamaño: ${f.tamano}`,
         `- Fecha: ${fecha}`,
-        f.ocasion ? `- Ocasión: ${f.ocasion}` : '',
+        (f.ocasion === 'otra' ? f.ocasion_otra : f.ocasion) ? `- Ocasión: ${f.ocasion === 'otra' ? f.ocasion_otra : f.ocasion}` : '',
         f.notas ? `- Detalles: ${f.notas}` : '',
         f.nombre ? `Soy ${f.nombre}.` : ''
       ].filter(Boolean).join('\n');
@@ -402,7 +415,33 @@ const MIMOSA_TELEFONO = ''; // p. ej. '+34 600 000 000'; mientras esté vacío n
     return { p: svg.querySelector('.cafe-revela'), gotas, ancho: l.width };
   }
 
+  // Pone la taza en su sitio final (por si el navegador dejó la caída a medias)
+  function tazaEnSuSitio() {
+    taza.getAnimations().forEach(a => { if (a.playState !== 'finished') { try { a.finish(); } catch (e) {} } });
+  }
+  // ¿El chorro sale de la boca de la taza y llega a la «m»? Si no, algo se quedó a medias
+  function chorroBien() {
+    const pol = svg.querySelector('polygon');
+    if (!pol) return false;
+    const h = hero.getBoundingClientRect(), b = boca.getBoundingClientRect(), l = logo.getBoundingClientRect();
+    const pts = pol.getAttribute('points').split(' ');
+    const [x0, y0] = pts[0].split(',').map(Number);
+    const mx = b.left + b.width / 2 - h.left, my = b.top + b.height / 2 - h.top;
+    const vb = svg.viewBox.baseVal;
+    const fin = svg.querySelector('circle');
+    const ex = l.left - h.left + l.width * 0.03, ey = l.top - h.top + l.height * 0.62;
+    const llega = fin && Math.hypot(+fin.getAttribute('cx') - ex, +fin.getAttribute('cy') - ey) < Math.max(24, l.height * 0.4);
+    return llega && Math.hypot(x0 - mx, y0 - my) < Math.max(40, b.width * 1.5) &&Math.abs(vb.width - h.width) < 2 && Math.abs(vb.height - h.height) < 2 && l.height > 0;
+  }
+  // Si algo no cuadra, se deja todo dibujado y en su sitio (sin repetir la animación)
+  function sanear() {
+    if (!empezado) return;
+    if (!dibujado && hero.classList.contains('is-escrito')) dibujado = true;
+    if (dibujado && !chorroBien()) finalEstatico();
+  }
+
   function finalEstatico() {
+    tazaEnSuSitio();
     construir();
     logo.classList.add('is-writing');
     logo.getAnimations().forEach(a => a.finish());
@@ -414,6 +453,7 @@ const MIMOSA_TELEFONO = ''; // p. ej. '+34 600 000 000'; mientras esté vacío n
   function animar() {
     if (empezado) return;
     empezado = true;
+    tazaEnSuSitio();
     const { p, gotas, ancho } = construir();
     const len = p.getTotalLength();
     const t1 = Math.max(650, len / VEL * 1000);
@@ -429,22 +469,63 @@ const MIMOSA_TELEFONO = ''; // p. ej. '+34 600 000 000'; mientras esté vacío n
     logo.style.animationTimingFunction = 'cubic-bezier(.15,.3,.45,1)';
     logo.querySelectorAll('.deco').forEach(d => d.style.setProperty('--t', Math.round((+d.dataset.at || 0) * t2) + 'ms'));
     setTimeout(() => logo.classList.add('is-writing'), 120 + t1 - 40);
-    setTimeout(() => { dibujado = true; hero.classList.add('is-escrito'); }, 120 + t1 + t2 - 150);
+    setTimeout(() => { dibujado = true; hero.classList.add('is-escrito'); sanear(); }, 120 + t1 + t2 - 150);
   }
 
   if (reduce || !taza.getAnimations().length) {
     requestAnimationFrame(finalEstatico);
   } else {
     taza.addEventListener('animationend', animar, { once: true });
+    // Ordenador: mientras la taza cae ya va soltando café (gotas y un chorrito que caen con su peso)
+    if (matchMedia('(min-width: 761px)').matches) {
+      const capa = document.createElement('div');
+      capa.className = 'cafe-goteo'; capa.setAttribute('aria-hidden', 'true');
+      hero.appendChild(capa);
+      const t0 = performance.now(), desde = 520, hasta = 1450;   // ms desde que empieza la caída
+      let ultimo = 0, ant = null;
+      const soltar = t => {
+        const e = t - t0;
+        if (e > hasta || empezado) return;
+        if (e > desde && t - ultimo > 12) {
+          ultimo = t;
+          const h = hero.getBoundingClientRect(), b = boca.getBoundingClientRect();
+          const x = b.left + b.width / 2 - h.left, y = b.top + b.height / 2 - h.top;
+          const vx = ant ? (x - ant.x) : 0, vy = ant ? (y - ant.y) : 0; ant = { x, y };
+          const tam = 7 + Math.random() * 12;
+          const g = document.createElement('i');
+          g.style.cssText = `left:${x}px;top:${y}px;width:${tam}px;height:${tam * (1.1 + Math.random() * .5)}px`;
+          capa.appendChild(g);
+          const caida = 45 + Math.random() * 100, lado = vx * 3 + (Math.random() - .5) * 26;
+          g.animate([
+            { transform: 'translate(-50%,-50%) scale(1)', opacity: .95 },
+            { transform: `translate(calc(-50% + ${lado}px), calc(-50% + ${caida + vy * 2}px)) scale(.55)`, opacity: 0 }
+          ], { duration: 480 + Math.random() * 340, easing: 'cubic-bezier(.45,0,.9,.6)', fill: 'forwards' }).finished.then(() => g.remove());
+        }
+        requestAnimationFrame(soltar);
+      };
+      requestAnimationFrame(soltar);
+    }
     // Si el navegador pausa la animación de la taza (pestaña en segundo plano, ahorro de batería…), arrancamos igual
-    setTimeout(animar, 1700);
+    const caida = taza.getAnimations()[0];
+    caida.finished.then(animar, animar);
+    setTimeout(() => { if (!empezado) { try { caida.finish(); } catch (e) {} animar(); } }, 1700);
+    // al volver con «atrás» o recargar desde caché, si algo quedó a medias, se deja dibujado del todo
+    addEventListener('pageshow', ev => { if (ev.persisted) { if (!dibujado) finalEstatico(); else sanear(); } });
+    // cuando acaban de cargar imágenes y letras, o se vuelve a la pestaña, se comprueba que todo cuadra
+    addEventListener('load', () => { setTimeout(sanear, 50); setTimeout(sanear, 700); });
+    document.fonts?.ready.then(() => { setTimeout(sanear, 50); setTimeout(sanear, 700); });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) { setTimeout(sanear, 50); setTimeout(sanear, 700); } });
+    setTimeout(sanear, 8000);
     // y, pase lo que pase, los botones y el eslogan quedan visibles y se pueden tocar
-    setTimeout(() => { hero.classList.add('is-escrito'); logo.classList.add('is-writing'); }, 6500);
+    setTimeout(() => {
+      if (!empezado) { empezado = true; finalEstatico(); }
+      hero.classList.add('is-escrito'); logo.classList.add('is-writing'); dibujado = true; sanear();
+    }, 6500);
   }
   let t;
   addEventListener('resize', () => {
     clearTimeout(t);
-    t = setTimeout(() => { if (dibujado) construir(); }, 150);
+    t = setTimeout(() => { if (dibujado) { tazaEnSuSitio(); construir(); } }, 150);
   });
 })();
 
@@ -643,4 +724,19 @@ document.querySelectorAll('[data-fotos]').forEach(b => b.addEventListener('click
     };
     pintar(); requestAnimationFrame(paso);
   });
+})();
+
+/* Carta: una categoría ocupa la pantalla entera solo si tiene contenido para llenarla; si es corta (p. ej. bollería) va a su altura */
+(function () {
+  const frames = document.querySelectorAll('.carta-frame');
+  if (!frames.length) return;
+  const ajustar = () => frames.forEach(f => {
+    f.classList.add('carta-frame--medir');
+    const alto = [...f.children].reduce((s, c) => s + c.getBoundingClientRect().height, 0);
+    f.classList.remove('carta-frame--medir');
+    f.classList.toggle('carta-frame--corta', alto < innerHeight * 0.62);
+  });
+  ajustar();
+  addEventListener('load', ajustar);
+  let t; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(ajustar, 200); });
 })();

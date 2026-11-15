@@ -63,7 +63,11 @@
     ticking = false;
     const limit = innerHeight * 0.94;
     pending = pending.filter(el => {
-      if (el.getBoundingClientRect().top < limit) { el.classList.add('is-in'); return false; }
+      // En la mesa de la portada las cosas llegan desde fuera (la carta desde muy abajo):
+      // se cuenta la posición de la mesa, no la del objeto desplazado, y llegan todas juntas
+      const mesa = el.closest('.mesa__in');
+      const top = mesa ? mesa.getBoundingClientRect().top + innerHeight * 0.3 : el.getBoundingClientRect().top;
+      if (top < limit) { el.classList.add('is-in'); return false; }
       return true;
     });
     if (!pending.length) { removeEventListener('scroll', onRevealScroll); removeEventListener('resize', onRevealScroll); }
